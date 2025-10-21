@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import Hero from "@/components/site/Hero";
+import GalleryRibbon from "@/components/site/GalleryRibbon";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
@@ -122,7 +123,7 @@ export default function Index() {
 
     toast({
       title: "Успех!",
-      description: `${name} (${ageNum}) з��писан(а) к мастеру «${chosen.master}». Осталось мест: ${chosen.freeSeats - 1}.`,
+      description: `${name} (${ageNum}) записан(а) к мастеру «${chosen.master}��. Осталось мест: ${chosen.freeSeats - 1}.`,
     });
 
     setName("");
