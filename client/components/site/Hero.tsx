@@ -3,7 +3,7 @@ export default function Hero() {
     <section className="relative">
       <div className="absolute inset-0">
         <img
-          src="https://images.unsplash.com/photo-1511512578047-dfb367046420?q=80&w=2070&auto=format&fit=crop"
+          src="https://cdn.builder.io/api/v1/image/assets%2F34a813691cc14349b2c9685aab1d2252%2F5a18384fb83b4f83ad9aca4415052eb4?format=webp&width=800"
           alt="Настольные ролевые игры"
           className="h-[56vh] w-full object-cover"
         />
