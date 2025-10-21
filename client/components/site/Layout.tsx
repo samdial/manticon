@@ -6,13 +6,29 @@ export default function Layout() {
       <header className="fixed top-0 left-0 right-0 z-50 bg-gradient-to-b from-background/80 to-background/10 backdrop-blur border-b border-border/50">
         <div className="container flex items-center justify-between py-3">
           <Link to="#top" className="flex items-center gap-2">
-            <span className="text-2xl tracking-widest font-bold font-display text-primary">МАНТИКОН</span>
+            <span className="text-2xl tracking-widest font-bold font-display text-primary">
+              МАНТИКОН
+            </span>
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
-            <a href="#about" className="hover:text-primary transition-colors">О конвенте</a>
-            <a href="#lectures" className="hover:text-primary transition-colors">Лекции</a>
-            <a href="#tables" className="hover:text-primary transition-colors">Игровые столы</a>
-            <a href="#register" className="hover:text-primary transition-colors">Регистрация</a>
+            <a href="#about" className="hover:text-primary transition-colors">
+              О конвенте
+            </a>
+            <a
+              href="#lectures"
+              className="hover:text-primary transition-colors"
+            >
+              Лекции
+            </a>
+            <a href="#tables" className="hover:text-primary transition-colors">
+              Игровые столы
+            </a>
+            <a
+              href="#register"
+              className="hover:text-primary transition-colors"
+            >
+              Регистрация
+            </a>
           </nav>
         </div>
       </header>
@@ -24,21 +40,44 @@ export default function Layout() {
       <footer className="mt-16 border-t border-border/60 bg-card/50">
         <div className="container py-8 grid gap-4 md:grid-cols-3 text-sm">
           <div>
-            <div className="text-lg font-display tracking-wider text-primary">МАНТИКОН</div>
-            <p className="text-muted-foreground mt-2">Конвент настольных ролевых игр. Добро пожаловать в мир приключений!</p>
+            <div className="text-lg font-display tracking-wider text-primary">
+              МАНТИКОН
+            </div>
+            <p className="text-muted-foreground mt-2">
+              Конвент настольных ролевых игр. Добро пожаловать в мир
+              приключений!
+            </p>
           </div>
           <div>
             <div className="font-semibold mb-2">Навигация</div>
             <ul className="space-y-1">
-              <li><a href="#about" className="hover:text-primary">О конвенте</a></li>
-              <li><a href="#lectures" className="hover:text-primary">Лекции</a></li>
-              <li><a href="#tables" className="hover:text-primary">Игровые столы</a></li>
-              <li><a href="#register" className="hover:text-primary">Регистрация</a></li>
+              <li>
+                <a href="#about" className="hover:text-primary">
+                  О конвенте
+                </a>
+              </li>
+              <li>
+                <a href="#lectures" className="hover:text-primary">
+                  Лекции
+                </a>
+              </li>
+              <li>
+                <a href="#tables" className="hover:text-primary">
+                  Игровые столы
+                </a>
+              </li>
+              <li>
+                <a href="#register" className="hover:text-primary">
+                  Регистрация
+                </a>
+              </li>
             </ul>
           </div>
           <div>
             <div className="font-semibold mb-2">Контакты</div>
-            <p className="text-muted-foreground">Email: info@mantikon.example</p>
+            <p className="text-muted-foreground">
+              Email: info@mantikon.example
+            </p>
             <p className="text-muted-foreground">VK: vk.com/mantikon</p>
           </div>
         </div>

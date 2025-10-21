@@ -4,18 +4,54 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { motion } from "framer-motion";
 
 const images: { src: string; alt: string }[] = [
-  { src: "https://images.unsplash.com/photo-1617806118233-18e1df0d9015?q=80&w=1600&auto=format&fit=crop", alt: "Кубики d20 крупным планом" },
-  { src: "https://images.unsplash.com/photo-1602802943152-c9d4a0b37c29?q=80&w=1600&auto=format&fit=crop", alt: "Фэнтези карта мира и миниатюры" },
-  { src: "https://images.unsplash.com/photo-1553484771-2d2d63c6e04b?q=80&w=1600&auto=format&fit=crop", alt: "Игровой стол и свечи" },
-  { src: "https://images.unsplash.com/photo-1596496181848-3091d4878b47?q=80&w=1600&auto=format&fit=crop", alt: "Ролевые книги и кубики" },
-  { src: "https://images.unsplash.com/photo-1542834369-f10ebf06d3cb?q=80&w=1600&auto=format&fit=crop", alt: "Игровые фишки и аксессуары" },
-  { src: "https://images.unsplash.com/photo-1522826657326-0466ba28c41f?q=80&w=1600&auto=format&fit=crop", alt: "Команда за столом" },
-  { src: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1600&auto=format&fit=crop", alt: "Красивая иллюстрация фэнтези" },
-  { src: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1600&auto=format&fit=crop", alt: "Атмосфера и свет" },
-  { src: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?q=80&w=1600&auto=format&fit=crop", alt: "Декорации и книги" },
-  { src: "https://images.unsplash.com/photo-1520975922284-9d1e8a4fd814?q=80&w=1600&auto=format&fit=crop", alt: "Герои и артефакты" },
-  { src: "https://images.unsplash.com/photo-1558981359-219d6364c9c8?q=80&w=1600&auto=format&fit=crop", alt: "Миниатюры на поле" },
-  { src: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1600&auto=format&fit=crop", alt: "Кубики d6 на столе" },
+  {
+    src: "https://images.unsplash.com/photo-1617806118233-18e1df0d9015?q=80&w=1600&auto=format&fit=crop",
+    alt: "Кубики d20 крупным планом",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1602802943152-c9d4a0b37c29?q=80&w=1600&auto=format&fit=crop",
+    alt: "Фэнтези карта мира и миниатюры",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1553484771-2d2d63c6e04b?q=80&w=1600&auto=format&fit=crop",
+    alt: "Игровой стол и свечи",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1596496181848-3091d4878b47?q=80&w=1600&auto=format&fit=crop",
+    alt: "Ролевые книги и кубики",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1542834369-f10ebf06d3cb?q=80&w=1600&auto=format&fit=crop",
+    alt: "Игровые фишки и аксессуары",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1522826657326-0466ba28c41f?q=80&w=1600&auto=format&fit=crop",
+    alt: "Команда за столом",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1485827404703-89b55fcc595e?q=80&w=1600&auto=format&fit=crop",
+    alt: "Красивая иллюстрация фэнтези",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1505740420928-5e560c06d30e?q=80&w=1600&auto=format&fit=crop",
+    alt: "Атмосфера и свет",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1449157291145-7efd050a4d0e?q=80&w=1600&auto=format&fit=crop",
+    alt: "Декорации и книги",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1520975922284-9d1e8a4fd814?q=80&w=1600&auto=format&fit=crop",
+    alt: "Герои и артефакты",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1558981359-219d6364c9c8?q=80&w=1600&auto=format&fit=crop",
+    alt: "Миниатюры на поле",
+  },
+  {
+    src: "https://images.unsplash.com/photo-1481627834876-b7833e8f5570?q=80&w=1600&auto=format&fit=crop",
+    alt: "Кубики d6 на столе",
+  },
 ];
 
 const options: EmblaOptionsType = {
@@ -37,7 +73,12 @@ export default function GalleryRibbon() {
         <div
           className="overflow-hidden rounded-xl"
           ref={emblaRef}
-          style={{ maskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)", WebkitMaskImage: "linear-gradient(to right, transparent, black 6%, black 94%, transparent)" }}
+          style={{
+            maskImage:
+              "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+            WebkitMaskImage:
+              "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+          }}
         >
           <div className="flex gap-3 p-3">
             {images.map((img, i) => (

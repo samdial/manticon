@@ -27,9 +27,36 @@ const STORAGE_KEY = "mantikon.tables.v1";
 
 function generateInitialTables(): GameTable[] {
   const masters = [
-    "Аристарх", "Белла", "Варг", "Грета", "Дарий", "Елена", "Жанна", "Земовит", "Илларион", "Кира",
-    "Люций", "Милана", "Нестор", "Ольга", "Павел", "Рада", "Свят", "Тамара", "Ульяна", "Феликс",
-    "Хельга", "Цезарь", "Чара", "Шандор", "Щука", "Элла", "Юлиан", "Яромир", "Мира", "Степан",
+    "Аристарх",
+    "Белла",
+    "Варг",
+    "Грета",
+    "Дарий",
+    "Елена",
+    "Жанна",
+    "Земовит",
+    "Илларион",
+    "Кира",
+    "Люций",
+    "Милана",
+    "Нестор",
+    "Ольга",
+    "Павел",
+    "Рада",
+    "Свят",
+    "Тамара",
+    "Ульяна",
+    "Феликс",
+    "Хельга",
+    "Цезарь",
+    "Чара",
+    "Шандор",
+    "Щука",
+    "Элла",
+    "Юлиан",
+    "Яромир",
+    "Мира",
+    "Степан",
   ];
   const systems = [
     "D&D 5e",
@@ -87,7 +114,10 @@ export default function Index() {
     }
   }, [tables]);
 
-  const selectable = useMemo(() => tables.filter((t) => t.freeSeats > 0), [tables]);
+  const selectable = useMemo(
+    () => tables.filter((t) => t.freeSeats > 0),
+    [tables],
+  );
 
   const morningTables = useMemo(() => tables.slice(0, 15), [tables]);
   const afternoonTables = useMemo(() => tables.slice(15, 30), [tables]);
@@ -103,19 +133,31 @@ export default function Index() {
     const ageNum = Number(age);
 
     if (!chosen) {
-      toast({ title: "Выберите стол", description: "Пожалуйста, выберите мастера со свободными местами." });
+      toast({
+        title: "Выберите стол",
+        description: "Пожалуйста, выберите мастера со свободными местами.",
+      });
       return;
     }
     if (!name.trim()) {
-      toast({ title: "Введите имя", description: "Укажите ваше имя для регистрации." });
+      toast({
+        title: "Введите имя",
+        description: "Укажите ваше имя для регистрации.",
+      });
       return;
     }
     if (!Number.isFinite(ageNum) || ageNum < 6 || ageNum > 120) {
-      toast({ title: "Некорректный возраст", description: "Возраст должен быть от 6 до 120." });
+      toast({
+        title: "Некорректный возраст",
+        description: "Возраст должен быть от 6 до 120.",
+      });
       return;
     }
     if (chosen.freeSeats <= 0) {
-      toast({ title: "Мест нет", description: "К сожалению, в этом столе уже нет мест." });
+      toast({
+        title: "Мест нет",
+        description: "К сожалению, в этом столе уже нет мест.",
+      });
       return;
     }
 
@@ -143,17 +185,22 @@ export default function Index() {
       <section id="about" className="container mt-12 grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle className="font-display tracking-wide">Анонсы и описание</CardTitle>
+            <CardTitle className="font-display tracking-wide">
+              Анонсы и описание
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-4">
             <p>
-              «Мантикон» — ежегодный конвент настольных ролевых игр: десятки столов, новые системы и лучшие мастера.
-              У нас — доброжелательное сообщество, насыщенная программа и комфортные зоны отдыха.
+              «Мантикон» — ежегодный конвент настольных ролевых игр: десятки
+              столов, новые системы и лучшие мастера. У нас — доброжелательное
+              сообщество, насыщенная программа и комфортные зоны отдыха.
             </p>
             <ul className="list-disc pl-5 space-y-1">
               <li>Место проведения: ДК «Пилигрим», Москва</li>
               <li>Даты: 20–22 сентября</li>
-              <li>Формат: короткие сессии на 3–4 часа, приветствуются новички</li>
+              <li>
+                Формат: короткие сессии на 3–4 часа, приветствуются новички
+              </li>
             </ul>
           </CardContent>
         </Card>
@@ -164,28 +211,67 @@ export default function Index() {
           <CardContent className="space-y-2 text-sm text-muted-foreground">
             <p>• Регистрация обязательна: места ограничены.</p>
             <p>• Возьмите документ — доступ в 16+ зоны по паспорту.</p>
-            <p>• Приходите чуть раньше начала, чтобы не опаздывать к старту партии.</p>
+            <p>
+              • Приходите чуть раньше начала, чтобы не опаздывать к старту
+              партии.
+            </p>
           </CardContent>
         </Card>
       </section>
 
       <section id="lectures" className="container mt-12">
-        <h2 className="text-2xl md:text-3xl font-display tracking-wide mb-4">Лекции — суббота</h2>
+        <h2 className="text-2xl md:text-3xl font-display tracking-wide mb-4">
+          Лекции — суббота
+        </h2>
         <div className="grid gap-4 md:grid-cols-2">
           {[
-            { time: "12:00", title: "Как вести первую НРИ", speaker: "Анна Воронова", desc: "Инструменты для старта: сессия ноль, безопаснос��ь и темп." },
-            { time: "13:30", title: "Миростроение без боли", speaker: "Илья Степанов", desc: "Практика создания сеттинга: карты, фракции, конфликты." },
-            { time: "15:00", title: "Импровизация мастера", speaker: "Сергей Лис", desc: "Приёмы импровизации, работа с идеями игроков." },
-            { time: "16:30", title: "Боёвка, которая не тормозит", speaker: "Кира Волкова", desc: "Динамичные сцены, инициативы и ясные ходы." },
-            { time: "18:00", title: "Хоррор у стола", speaker: "Дмитрий Чернов", desc: "Атмосфера, безопасность, звуковой дизайн и свет." },
-            { time: "19:30", title: "Инди‑системы 2025", speaker: "Влад Мариус", desc: "Обзор свежих правил и где их найти." },
+            {
+              time: "12:00",
+              title: "Как вести первую НРИ",
+              speaker: "Анна Воронова",
+              desc: "Инструменты для старта: сессия ноль, безопаснос��ь и темп.",
+            },
+            {
+              time: "13:30",
+              title: "Миростроение без боли",
+              speaker: "Илья Степанов",
+              desc: "Практика создания сеттинга: карты, фракции, конфликты.",
+            },
+            {
+              time: "15:00",
+              title: "Импровизация мастера",
+              speaker: "Сергей Лис",
+              desc: "Приёмы импровизации, работа с идеями игроков.",
+            },
+            {
+              time: "16:30",
+              title: "Боёвка, которая не тормозит",
+              speaker: "Кира Волкова",
+              desc: "Динамичные сцены, инициативы и ясные ходы.",
+            },
+            {
+              time: "18:00",
+              title: "Хоррор у стола",
+              speaker: "Дмитрий Чернов",
+              desc: "Атмосфера, безопасность, звуковой дизайн и свет.",
+            },
+            {
+              time: "19:30",
+              title: "Инди‑системы 2025",
+              speaker: "Влад Мариус",
+              desc: "Обзор свежих правил и где их найти.",
+            },
           ].map((l, i) => (
             <Card key={i}>
               <CardContent className="p-5 flex items-start gap-4">
-                <div className="shrink-0 rounded-md bg-primary/10 text-primary px-3 py-2 font-semibold">{l.time}</div>
+                <div className="shrink-0 rounded-md bg-primary/10 text-primary px-3 py-2 font-semibold">
+                  {l.time}
+                </div>
                 <div>
                   <div className="font-semibold">{l.title}</div>
-                  <div className="text-xs text-muted-foreground">Спикер: {l.speaker}</div>
+                  <div className="text-xs text-muted-foreground">
+                    Спикер: {l.speaker}
+                  </div>
                   <p className="mt-2 text-sm">{l.desc}</p>
                 </div>
               </CardContent>
@@ -196,10 +282,16 @@ export default function Index() {
 
       <section id="tables" className="container mt-12">
         <div className="flex items-end justify-between mb-2">
-          <h2 className="text-2xl md:text-3xl font-display tracking-wide">Игровые столы — воскресенье</h2>
-          <div className="text-sm text-muted-foreground">Свободные места: {tables.reduce((a, t) => a + t.freeSeats, 0)}</div>
+          <h2 className="text-2xl md:text-3xl font-display tracking-wide">
+            Игровые столы — воскресенье
+          </h2>
+          <div className="text-sm text-muted-foreground">
+            Свободные места: {tables.reduce((a, t) => a + t.freeSeats, 0)}
+          </div>
         </div>
-        <p className="text-sm text-muted-foreground mb-4">Сессии 10:30–15:00 и с 15:00.</p>
+        <p className="text-sm text-muted-foreground mb-4">
+          Сессии 10:30–15:00 и с 15:00.
+        </p>
 
         <Tabs defaultValue="morning">
           <TabsList>
@@ -222,12 +314,18 @@ export default function Index() {
                   {morningTables.map((t) => (
                     <tr key={t.id} className="border-t">
                       <td className="px-4 py-3 font-medium">{t.master}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{t.system}</td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        {t.system}
+                      </td>
                       <td className="px-4 py-3">{t.description}</td>
                       <td className="px-4 py-3">
-                        <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                          t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-destructive/10 text-destructive"
-                        }`}>
+                        <span
+                          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                            t.freeSeats > 0
+                              ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300"
+                              : "bg-destructive/10 text-destructive"
+                          }`}
+                        >
                           {t.freeSeats}
                         </span>
                       </td>
@@ -242,13 +340,19 @@ export default function Index() {
                   <CardContent className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="font-semibold">{t.master}</div>
-                      <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                        t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900" : "bg-destructive/10 text-destructive"
-                      }`}>
+                      <span
+                        className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                          t.freeSeats > 0
+                            ? "bg-emerald-100 text-emerald-900"
+                            : "bg-destructive/10 text-destructive"
+                        }`}
+                      >
                         {t.freeSeats}
                       </span>
                     </div>
-                    <div className="text-xs text-muted-foreground">{t.system}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t.system}
+                    </div>
                     <p className="text-sm">{t.description}</p>
                   </CardContent>
                 </Card>
@@ -271,12 +375,18 @@ export default function Index() {
                   {afternoonTables.map((t) => (
                     <tr key={t.id} className="border-t">
                       <td className="px-4 py-3 font-medium">{t.master}</td>
-                      <td className="px-4 py-3 text-muted-foreground">{t.system}</td>
+                      <td className="px-4 py-3 text-muted-foreground">
+                        {t.system}
+                      </td>
                       <td className="px-4 py-3">{t.description}</td>
                       <td className="px-4 py-3">
-                        <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                          t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-destructive/10 text-destructive"
-                        }`}>
+                        <span
+                          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                            t.freeSeats > 0
+                              ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300"
+                              : "bg-destructive/10 text-destructive"
+                          }`}
+                        >
                           {t.freeSeats}
                         </span>
                       </td>
@@ -291,13 +401,19 @@ export default function Index() {
                   <CardContent className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
                       <div className="font-semibold">{t.master}</div>
-                      <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                        t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900" : "bg-destructive/10 text-destructive"
-                      }`}>
+                      <span
+                        className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                          t.freeSeats > 0
+                            ? "bg-emerald-100 text-emerald-900"
+                            : "bg-destructive/10 text-destructive"
+                        }`}
+                      >
                         {t.freeSeats}
                       </span>
                     </div>
-                    <div className="text-xs text-muted-foreground">{t.system}</div>
+                    <div className="text-xs text-muted-foreground">
+                      {t.system}
+                    </div>
                     <p className="text-sm">{t.description}</p>
                   </CardContent>
                 </Card>
@@ -310,19 +426,30 @@ export default function Index() {
       <section id="register" className="container mt-12 mb-20">
         <Card>
           <CardHeader>
-            <CardTitle className="font-display tracking-wide">Регистрация на игру</CardTitle>
+            <CardTitle className="font-display tracking-wide">
+              Регистрация на игру
+            </CardTitle>
           </CardHeader>
           <CardContent>
-            <form onSubmit={handleRegister} className="grid gap-4 md:grid-cols-4">
+            <form
+              onSubmit={handleRegister}
+              className="grid gap-4 md:grid-cols-4"
+            >
               <div className="md:col-span-2">
                 <Label htmlFor="master">Выбор мастера</Label>
                 <Select value={selectedId} onValueChange={setSelectedId}>
-                  <SelectTrigger id="master" className="mt-1" aria-label="Выберите стол">
+                  <SelectTrigger
+                    id="master"
+                    className="mt-1"
+                    aria-label="Выберите стол"
+                  >
                     <SelectValue placeholder="Выберите стол с местами" />
                   </SelectTrigger>
                   <SelectContent>
                     {selectable.length === 0 ? (
-                      <SelectItem disabled value="none">Мест нет</SelectItem>
+                      <SelectItem disabled value="none">
+                        Мест нет
+                      </SelectItem>
                     ) : (
                       selectable.map((t) => (
                         <SelectItem key={t.id} value={t.id}>
@@ -335,14 +462,29 @@ export default function Index() {
               </div>
               <div>
                 <Label htmlFor="name">Имя</Label>
-                <Input id="name" className="mt-1" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ваше имя" />
+                <Input
+                  id="name"
+                  className="mt-1"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                  placeholder="Ваше имя"
+                />
               </div>
               <div>
                 <Label htmlFor="age">Возраст</Label>
-                <Input id="age" className="mt-1" value={age} onChange={(e) => setAge(e.target.value)} placeholder="Например, 18" inputMode="numeric" />
+                <Input
+                  id="age"
+                  className="mt-1"
+                  value={age}
+                  onChange={(e) => setAge(e.target.value)}
+                  placeholder="Например, 18"
+                  inputMode="numeric"
+                />
               </div>
               <div className="md:col-span-4">
-                <Button type="submit" className="w-full md:w-auto">Записаться</Button>
+                <Button type="submit" className="w-full md:w-auto">
+                  Записаться
+                </Button>
               </div>
             </form>
           </CardContent>
