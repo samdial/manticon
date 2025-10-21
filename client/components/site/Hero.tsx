@@ -4,10 +4,10 @@ export default function Hero() {
       <div className="absolute inset-0">
         <img
           src="https://cdn.builder.io/api/v1/image/assets%2F34a813691cc14349b2c9685aab1d2252%2F5a18384fb83b4f83ad9aca4415052eb4?format=webp&width=800"
-          alt="Настольные ролевые игры"
+          alt="В гостях у Мантикоры — шапка конвента"
           className="h-[56vh] w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/50 via-black/30 to-background/80" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-background/85" />
       </div>
       <div className="relative container h-[56vh] flex items-end pb-10">
         <div>
