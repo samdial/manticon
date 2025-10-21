@@ -107,7 +107,7 @@ export default function Index() {
       return;
     }
     if (!name.trim()) {
-      toast({ title: "Введите им��", description: "Укажите ваше имя для регистрации." });
+      toast({ title: "Введите имя", description: "Укажите ваше имя для регистрации." });
       return;
     }
     if (!Number.isFinite(ageNum) || ageNum < 6 || ageNum > 120) {
@@ -169,61 +169,142 @@ export default function Index() {
         </Card>
       </section>
 
-      <section id="tables" className="container mt-12">
-        <div className="flex items-end justify-between mb-4">
-          <h2 className="text-2xl md:text-3xl font-display tracking-wide">Игровые столы (30)</h2>
-          <div className="text-sm text-muted-foreground">Свободные места: {tables.reduce((a, t) => a + t.freeSeats, 0)}</div>
-        </div>
-
-        {/* Table for md+ screens */}
-        <div className="hidden md:block overflow-x-auto rounded-lg border">
-          <table className="w-full text-sm">
-            <thead className="bg-muted/50">
-              <tr className="text-left">
-                <th className="px-4 py-3 w-[22%]">Мастер</th>
-                <th className="px-4 py-3 w-[18%]">Система</th>
-                <th className="px-4 py-3">Краткое описание</th>
-                <th className="px-4 py-3 w-[14%]">Свободных мест</th>
-              </tr>
-            </thead>
-            <tbody>
-              {tables.map((t) => (
-                <tr key={t.id} className="border-t">
-                  <td className="px-4 py-3 font-medium">{t.master}</td>
-                  <td className="px-4 py-3 text-muted-foreground">{t.system}</td>
-                  <td className="px-4 py-3">{t.description}</td>
-                  <td className="px-4 py-3">
-                    <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                      t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-destructive/10 text-destructive"
-                    }`}>
-                      {t.freeSeats}
-                    </span>
-                  </td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-
-        {/* Cards for mobile */}
-        <div className="md:hidden grid gap-3">
-          {tables.map((t) => (
-            <Card key={t.id}>
-              <CardContent className="p-4 space-y-2">
-                <div className="flex items-center justify-between">
-                  <div className="font-semibold">{t.master}</div>
-                  <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                    t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900" : "bg-destructive/10 text-destructive"
-                  }`}>
-                    {t.freeSeats}
-                  </span>
+      <section id="lectures" className="container mt-12">
+        <h2 className="text-2xl md:text-3xl font-display tracking-wide mb-4">Лекции — суббота</h2>
+        <div className="grid gap-4 md:grid-cols-2">
+          {[
+            { time: "12:00", title: "Как вести первую НРИ", speaker: "Анна Воронова", desc: "Инструменты для старта: сессия ноль, безопаснос��ь и темп." },
+            { time: "13:30", title: "Миростроение без боли", speaker: "Илья Степанов", desc: "Практика создания сеттинга: карты, фракции, конфликты." },
+            { time: "15:00", title: "Импровизация мастера", speaker: "Сергей Лис", desc: "Приёмы импровизации, работа с идеями игроков." },
+            { time: "16:30", title: "Боёвка, которая не тормозит", speaker: "Кира Волкова", desc: "Динамичные сцены, инициативы и ясные ходы." },
+            { time: "18:00", title: "Хоррор у стола", speaker: "Дмитрий Чернов", desc: "Атмосфера, безопасность, звуковой дизайн и свет." },
+            { time: "19:30", title: "Инди‑системы 2025", speaker: "Влад Мариус", desc: "Обзор свежих правил и где их найти." },
+          ].map((l, i) => (
+            <Card key={i}>
+              <CardContent className="p-5 flex items-start gap-4">
+                <div className="shrink-0 rounded-md bg-primary/10 text-primary px-3 py-2 font-semibold">{l.time}</div>
+                <div>
+                  <div className="font-semibold">{l.title}</div>
+                  <div className="text-xs text-muted-foreground">Спикер: {l.speaker}</div>
+                  <p className="mt-2 text-sm">{l.desc}</p>
                 </div>
-                <div className="text-xs text-muted-foreground">{t.system}</div>
-                <p className="text-sm">{t.description}</p>
               </CardContent>
             </Card>
           ))}
         </div>
+      </section>
+
+      <section id="tables" className="container mt-12">
+        <div className="flex items-end justify-between mb-2">
+          <h2 className="text-2xl md:text-3xl font-display tracking-wide">Игровые столы — воскресенье</h2>
+          <div className="text-sm text-muted-foreground">Свободные места: {tables.reduce((a, t) => a + t.freeSeats, 0)}</div>
+        </div>
+        <p className="text-sm text-muted-foreground mb-4">Сессии 10:30–15:00 и с 15:00.</p>
+
+        <Tabs defaultValue="morning">
+          <TabsList>
+            <TabsTrigger value="morning">10:30–15:00</TabsTrigger>
+            <TabsTrigger value="afternoon">с 15:00</TabsTrigger>
+          </TabsList>
+
+          <TabsContent value="morning">
+            <div className="hidden md:block overflow-x-auto rounded-lg border">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50">
+                  <tr className="text-left">
+                    <th className="px-4 py-3 w-[22%]">Мастер</th>
+                    <th className="px-4 py-3 w-[18%]">Система</th>
+                    <th className="px-4 py-3">Краткое описание</th>
+                    <th className="px-4 py-3 w-[14%]">Свободных мест</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {morningTables.map((t) => (
+                    <tr key={t.id} className="border-t">
+                      <td className="px-4 py-3 font-medium">{t.master}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{t.system}</td>
+                      <td className="px-4 py-3">{t.description}</td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                          t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-destructive/10 text-destructive"
+                        }`}>
+                          {t.freeSeats}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="md:hidden grid gap-3 mt-3">
+              {morningTables.map((t) => (
+                <Card key={t.id}>
+                  <CardContent className="p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="font-semibold">{t.master}</div>
+                      <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                        t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900" : "bg-destructive/10 text-destructive"
+                      }`}>
+                        {t.freeSeats}
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground">{t.system}</div>
+                    <p className="text-sm">{t.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+
+          <TabsContent value="afternoon">
+            <div className="hidden md:block overflow-x-auto rounded-lg border">
+              <table className="w-full text-sm">
+                <thead className="bg-muted/50">
+                  <tr className="text-left">
+                    <th className="px-4 py-3 w-[22%]">Мастер</th>
+                    <th className="px-4 py-3 w-[18%]">Система</th>
+                    <th className="px-4 py-3">Краткое описание</th>
+                    <th className="px-4 py-3 w-[14%]">Свободных мест</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {afternoonTables.map((t) => (
+                    <tr key={t.id} className="border-t">
+                      <td className="px-4 py-3 font-medium">{t.master}</td>
+                      <td className="px-4 py-3 text-muted-foreground">{t.system}</td>
+                      <td className="px-4 py-3">{t.description}</td>
+                      <td className="px-4 py-3">
+                        <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                          t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300" : "bg-destructive/10 text-destructive"
+                        }`}>
+                          {t.freeSeats}
+                        </span>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="md:hidden grid gap-3 mt-3">
+              {afternoonTables.map((t) => (
+                <Card key={t.id}>
+                  <CardContent className="p-4 space-y-2">
+                    <div className="flex items-center justify-between">
+                      <div className="font-semibold">{t.master}</div>
+                      <span className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+                        t.freeSeats > 0 ? "bg-emerald-100 text-emerald-900" : "bg-destructive/10 text-destructive"
+                      }`}>
+                        {t.freeSeats}
+                      </span>
+                    </div>
+                    <div className="text-xs text-muted-foreground">{t.system}</div>
+                    <p className="text-sm">{t.description}</p>
+                  </CardContent>
+                </Card>
+              ))}
+            </div>
+          </TabsContent>
+        </Tabs>
       </section>
 
       <section id="register" className="container mt-12 mb-20">
