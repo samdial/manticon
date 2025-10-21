@@ -122,7 +122,7 @@ export default function Index() {
 
     toast({
       title: "Успех!",
-      description: `${name} (${ageNum}) записан(а) к мастеру «${chosen.master}». Осталось мест: ${chosen.freeSeats - 1}.`,
+      description: `${name} (${ageNum}) з��писан(а) к мастеру «${chosen.master}». Осталось мест: ${chosen.freeSeats - 1}.`,
     });
 
     setName("");
@@ -132,6 +132,8 @@ export default function Index() {
   return (
     <div>
       <Hero />
+
+      <GalleryRibbon />
 
       <section id="about" className="container mt-12 grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
@@ -250,7 +252,7 @@ export default function Index() {
                 <Input id="name" className="mt-1" value={name} onChange={(e) => setName(e.target.value)} placeholder="Ваше имя" />
               </div>
               <div>
-                <Label htmlFor="age">В��зраст</Label>
+                <Label htmlFor="age">Возраст</Label>
                 <Input id="age" className="mt-1" value={age} onChange={(e) => setAge(e.target.value)} placeholder="Например, 18" inputMode="numeric" />
               </div>
               <div className="md:col-span-4">
