@@ -30,4 +30,13 @@ const App = () => (
   </QueryClientProvider>
 );
 
-createRoot(document.getElementById("root")!).render(<App />);
+import type { Root } from "react-dom/client";
+
+const container = document.getElementById("root");
+if (!container) throw new Error("Root container #root not found");
+
+// Reuse the same root across HMR to avoid double createRoot()
+const w = window as unknown as { __mantikon_root?: Root };
+const root = w.__mantikon_root ?? createRoot(container);
+w.__mantikon_root = root;
+root.render(<App />);
