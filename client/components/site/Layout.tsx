@@ -10,6 +10,7 @@ export default function Layout() {
           </Link>
           <nav className="hidden md:flex items-center gap-6 text-sm">
             <a href="#about" className="hover:text-primary transition-colors">О конвенте</a>
+            <a href="#lectures" className="hover:text-primary transition-colors">Лекции</a>
             <a href="#tables" className="hover:text-primary transition-colors">Игровые столы</a>
             <a href="#register" className="hover:text-primary transition-colors">Регистрация</a>
           </nav>
@@ -30,6 +31,7 @@ export default function Layout() {
             <div className="font-semibold mb-2">Навигация</div>
             <ul className="space-y-1">
               <li><a href="#about" className="hover:text-primary">О конвенте</a></li>
+              <li><a href="#lectures" className="hover:text-primary">Лекции</a></li>
               <li><a href="#tables" className="hover:text-primary">Игровые столы</a></li>
               <li><a href="#register" className="hover:text-primary">Регистрация</a></li>
             </ul>
