@@ -12,6 +12,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
 
 export type GameTable = {
@@ -123,7 +124,7 @@ export default function Index() {
 
     toast({
       title: "Успех!",
-      description: `${name} (${ageNum}) записан(а) к мастеру «${chosen.master}��. Осталось мест: ${chosen.freeSeats - 1}.`,
+      description: `${name} (${ageNum}) записан(а) к мастеру «${chosen.master}». Осталось мест: ${chosen.freeSeats - 1}.`,
     });
 
     setName("");
