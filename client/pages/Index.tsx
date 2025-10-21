@@ -89,6 +89,9 @@ export default function Index() {
 
   const selectable = useMemo(() => tables.filter((t) => t.freeSeats > 0), [tables]);
 
+  const morningTables = useMemo(() => tables.slice(0, 15), [tables]);
+  const afternoonTables = useMemo(() => tables.slice(15, 30), [tables]);
+
   // Registration form state
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [name, setName] = useState("");
@@ -104,7 +107,7 @@ export default function Index() {
       return;
     }
     if (!name.trim()) {
-      toast({ title: "Введите имя", description: "Укажите ваше имя для регистрации." });
+      toast({ title: "Введите им��", description: "Укажите ваше имя для регистрации." });
       return;
     }
     if (!Number.isFinite(ageNum) || ageNum < 6 || ageNum > 120) {
