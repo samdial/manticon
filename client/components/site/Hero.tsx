@@ -7,7 +7,7 @@ export default function Hero() {
           alt="В гостях у Мантикоры — шапка конвента"
           className="h-[56vh] w-full object-cover"
         />
-        <div className="absolute inset-0 bg-gradient-to-b from-black/60 via-black/35 to-background/85" />
+        <div className="absolute inset-0 bg-gradient-to-b from-black/70 via-black/50 to-background/90" />
       </div>
       <div className="relative container h-[56vh] flex items-end pb-10">
         <div>
