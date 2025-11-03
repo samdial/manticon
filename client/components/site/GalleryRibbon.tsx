@@ -66,7 +66,7 @@ const images: { src: string; alt: string }[] = [
   },
   {
     src: "https://cdn.builder.io/api/v1/image/assets%2F34a813691cc14349b2c9685aab1d2252%2F45e5e8244ebe42d4ac868ac95419df7d?format=webp&width=800",
-    alt: "Люди за столом на мероприятии",
+    alt: "Люди за столом на мероприят��и",
   },
   {
     src: "https://cdn.builder.io/api/v1/image/assets%2F34a813691cc14349b2c9685aab1d2252%2Fcce4be28cfe6494e86040f563292a02c?format=webp&width=800",
@@ -241,7 +241,7 @@ export default function GalleryRibbon() {
   return (
     <>
       <section className="container mt-6 md:mt-10" aria-label="Фотолента">
-        <div className="relative rounded-xl border bg-card/60">
+        <div className="relative rounded-xl border bg-card">
           <div
             className="overflow-hidden rounded-xl"
             ref={emblaRef}
