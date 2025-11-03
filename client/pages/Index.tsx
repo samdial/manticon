@@ -36,7 +36,7 @@ function generateInitialTables(): GameTable[] {
     "Жанна",
     "Земовит",
     "Илларион",
-    "Кира",
+    "Ки��а",
     "Люций",
     "Милана",
     "Нестор",
@@ -185,7 +185,7 @@ export default function Index() {
       <section id="about" className="container mt-12 grid gap-6 md:grid-cols-3">
         <Card className="md:col-span-2">
           <CardHeader>
-            <CardTitle className="font-display text-3xl font-bold tracking-widest text-amber-900 dark:text-amber-100">
+            <CardTitle className="font-display text-3xl font-bold tracking-tight text-amber-900 dark:text-amber-100">
               Анонсы и описание
             </CardTitle>
           </CardHeader>
@@ -206,7 +206,7 @@ export default function Index() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="font-display text-3xl font-bold tracking-widest text-amber-900 dark:text-amber-100">Важное</CardTitle>
+            <CardTitle className="font-display text-3xl font-bold tracking-tight text-amber-900 dark:text-amber-100">Важное</CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-muted-foreground">
             <p>• Регистрация обязательна: места ограничены.</p>
@@ -220,7 +220,7 @@ export default function Index() {
       </section>
 
       <section id="lectures" className="container mt-12">
-        <h2 className="text-3xl md:text-4xl font-display font-bold tracking-widest text-amber-900 dark:text-amber-100 mb-6">
+        <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-amber-900 dark:text-amber-100 mb-6">
           Лекции — суббота
         </h2>
         <div className="grid gap-4 md:grid-cols-2">
@@ -282,7 +282,7 @@ export default function Index() {
 
       <section id="tables" className="container mt-12">
         <div className="flex items-end justify-between mb-6">
-          <h2 className="text-3xl md:text-4xl font-display font-bold tracking-widest text-amber-900 dark:text-amber-100">
+          <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-amber-900 dark:text-amber-100">
             Игровые столы — воскресенье
           </h2>
           <div className="text-sm text-muted-foreground">
@@ -366,7 +366,7 @@ export default function Index() {
                 <thead className="bg-muted/50">
                   <tr className="text-left">
                     <th className="px-4 py-3 w-[22%]">Мастер</th>
-                    <th className="px-4 py-3 w-[18%]">Сис��ема</th>
+                    <th className="px-4 py-3 w-[18%]">Система</th>
                     <th className="px-4 py-3">Краткое описание</th>
                     <th className="px-4 py-3 w-[14%]">Свободных мест</th>
                   </tr>
@@ -426,7 +426,7 @@ export default function Index() {
       <section id="register" className="container mt-12 mb-20">
         <Card>
           <CardHeader>
-            <CardTitle className="font-display text-3xl font-bold tracking-widest text-amber-900 dark:text-amber-100">
+            <CardTitle className="font-display text-3xl font-bold tracking-tight text-amber-900 dark:text-amber-100">
               Регистрация на игру
             </CardTitle>
           </CardHeader>
