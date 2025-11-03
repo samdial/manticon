@@ -1,14 +1,13 @@
 import "./global.css";
 
-import { Toaster } from "@/components/ui/toaster";
-import { createRoot } from "react-dom/client";
-import { Toaster as Sonner } from "@/components/ui/sonner";
-import { TooltipProvider } from "@/components/ui/tooltip";
+import { createRoot, type Root } from "react-dom/client";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import { BrowserRouter, Routes, Route } from "react-router-dom";
-import Index from "./pages/Index";
-import NotFound from "./pages/NotFound";
+import { TooltipProvider } from "@/components/ui/tooltip";
+import { Toaster } from "@/components/ui/sonner";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "@/components/site";
+import Index from "@/pages/Index";
+import NotFound from "@/pages/NotFound.tsx";
 
 const queryClient = new QueryClient();
 
@@ -16,7 +15,7 @@ const App = () => (
   <QueryClientProvider client={queryClient}>
     <TooltipProvider>
       <Toaster />
-      <Sonner />
+      {/*<Sonner />*/}
       <BrowserRouter>
         <Routes>
           <Route element={<Layout />}>
@@ -29,8 +28,6 @@ const App = () => (
     </TooltipProvider>
   </QueryClientProvider>
 );
-
-import type { Root } from "react-dom/client";
 
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container #root not found");
