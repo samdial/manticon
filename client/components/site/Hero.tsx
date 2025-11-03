@@ -14,7 +14,10 @@ export default function Hero() {
           <span className="inline-block mb-2 rounded-full bg-secondary/80 px-3 py-1 text-xs font-semibold uppercase tracking-wide text-secondary-foreground">
             Фэнтези • Ролевые игры • Комьюнити
           </span>
-          <h1 className="font-gothic text-5xl md:text-7xl font-bold tracking-tight text-amber-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]" style={{ fontVariant: "small-caps", letterSpacing: "0.05em" }}>
+          <h1
+            className="font-gothic text-5xl md:text-7xl font-bold tracking-tight text-amber-50 drop-shadow-[0_2px_12px_rgba(0,0,0,0.7)]"
+            style={{ fontVariant: "small-caps", letterSpacing: "0.05em" }}
+          >
             Конвент НРИ «Мантикон»
           </h1>
           <p className="mt-3 text-card-foreground/90 max-w-2xl text-base md:text-lg drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">

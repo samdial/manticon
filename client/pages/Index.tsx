@@ -206,7 +206,9 @@ export default function Index() {
         </Card>
         <Card>
           <CardHeader>
-            <CardTitle className="font-display text-3xl font-bold tracking-tight text-amber-900 dark:text-amber-100">Важное</CardTitle>
+            <CardTitle className="font-display text-3xl font-bold tracking-tight text-amber-900 dark:text-amber-100">
+              Важное
+            </CardTitle>
           </CardHeader>
           <CardContent className="space-y-2 text-sm text-muted-foreground">
             <p>• Регистрация обязательна: места ограничены.</p>
@@ -500,37 +502,43 @@ export default function Index() {
             {
               name: "Таверна Мудреца",
               description: "Сеть кафе настольных игр",
-              image: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=80&w=400&auto=format&fit=crop",
+              image:
+                "https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=80&w=400&auto=format&fit=crop",
               link: "https://example.com",
             },
             {
               name: "DragonSkull Games",
               description: "Издатель настольных ролевых игр",
-              image: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?q=80&w=400&auto=format&fit=crop",
+              image:
+                "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?q=80&w=400&auto=format&fit=crop",
               link: "https://example.com",
             },
             {
               name: "Экспедиция",
               description: "Туристическое агентство",
-              image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400&auto=format&fit=crop",
+              image:
+                "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400&auto=format&fit=crop",
               link: "https://example.com",
             },
             {
               name: "Райские Миры",
               description: "Специализированны�� магазин",
-              image: "https://images.unsplash.com/photo-1570303540540-25e0e5b2eb9a?q=80&w=400&auto=format&fit=crop",
+              image:
+                "https://images.unsplash.com/photo-1570303540540-25e0e5b2eb9a?q=80&w=400&auto=format&fit=crop",
               link: "https://example.com",
             },
             {
               name: "Ночной Орден",
               description: "Баланс игровых правил",
-              image: "https://images.unsplash.com/photo-1552765069-5c63e89b51c7?q=80&w=400&auto=format&fit=crop",
+              image:
+                "https://images.unsplash.com/photo-1552765069-5c63e89b51c7?q=80&w=400&auto=format&fit=crop",
               link: "https://example.com",
             },
             {
               name: "Легенда",
               description: "Сообщество неклассических RPG",
-              image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&auto=format&fit=crop",
+              image:
+                "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&auto=format&fit=crop",
               link: "https://example.com",
             },
           ].map((sponsor, i) => (
