@@ -16,6 +16,7 @@ export default {
       fontFamily: {
         sans: ["Inter", "system-ui", "sans-serif"],
         display: ["Uncial Antiqua", "serif"],
+        gothic: ["Crimson Text", "serif"],
       },
       colors: {
         border: "hsl(var(--border))",
