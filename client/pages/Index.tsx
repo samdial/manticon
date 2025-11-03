@@ -71,7 +71,7 @@ function generateInitialTables(): GameTable[] {
     "космическая опера",
     "детективный хоррор",
     "плащи и кинжалы",
-    "классическое приключение",
+    "кл��ссическое приключение",
     "мистика и заговоры",
   ];
 
@@ -155,7 +155,7 @@ export default function Index() {
     }
     if (chosen.freeSeats <= 0) {
       toast({
-        title: "Мест нет",
+        title: "��ест нет",
         description: "К сожалению, в этом столе уже нет мест.",
       });
       return;
@@ -489,6 +489,78 @@ export default function Index() {
             </form>
           </CardContent>
         </Card>
+      </section>
+
+      <section id="sponsors" className="container mt-12 mb-20">
+        <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-amber-900 dark:text-amber-100 mb-6 text-center">
+          Спонсоры
+        </h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          {[
+            {
+              name: "Таверна Мудреца",
+              description: "Сеть кафе настольных игр",
+              image: "https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=80&w=400&auto=format&fit=crop",
+              link: "https://example.com",
+            },
+            {
+              name: "DragonSkull Games",
+              description: "Издатель настольных ролевых игр",
+              image: "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?q=80&w=400&auto=format&fit=crop",
+              link: "https://example.com",
+            },
+            {
+              name: "Экспедиция",
+              description: "Туристическое агентство",
+              image: "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400&auto=format&fit=crop",
+              link: "https://example.com",
+            },
+            {
+              name: "Райские Миры",
+              description: "Специализированны�� магазин",
+              image: "https://images.unsplash.com/photo-1570303540540-25e0e5b2eb9a?q=80&w=400&auto=format&fit=crop",
+              link: "https://example.com",
+            },
+            {
+              name: "Ночной Орден",
+              description: "Баланс игровых правил",
+              image: "https://images.unsplash.com/photo-1552765069-5c63e89b51c7?q=80&w=400&auto=format&fit=crop",
+              link: "https://example.com",
+            },
+            {
+              name: "Легенда",
+              description: "Сообщество неклассических RPG",
+              image: "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&auto=format&fit=crop",
+              link: "https://example.com",
+            },
+          ].map((sponsor, i) => (
+            <a
+              key={i}
+              href={sponsor.link}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="group"
+            >
+              <Card className="h-full overflow-hidden transition-all hover:shadow-lg hover:border-amber-200 dark:hover:border-amber-800">
+                <div className="overflow-hidden h-40">
+                  <img
+                    src={sponsor.image}
+                    alt={sponsor.name}
+                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+                  />
+                </div>
+                <CardContent className="p-4">
+                  <h3 className="font-semibold text-lg text-amber-900 dark:text-amber-100 mb-1">
+                    {sponsor.name}
+                  </h3>
+                  <p className="text-sm text-muted-foreground">
+                    {sponsor.description}
+                  </p>
+                </CardContent>
+              </Card>
+            </a>
+          ))}
+        </div>
       </section>
     </div>
   );
