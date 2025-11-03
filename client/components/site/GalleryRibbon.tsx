@@ -223,7 +223,9 @@ const options: EmblaOptionsType = {
 
 export default function GalleryRibbon() {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
-  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(
+    null,
+  );
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
@@ -239,61 +241,61 @@ export default function GalleryRibbon() {
   return (
     <>
       <section className="container mt-6 md:mt-10" aria-label="Фотолента">
-      <div className="relative rounded-xl border bg-card/60">
-        <div
-          className="overflow-hidden rounded-xl"
-          ref={emblaRef}
-          style={{
-            maskImage:
-              "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
-            WebkitMaskImage:
-              "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
-          }}
-        >
-          <div className="flex gap-3 p-3">
-            {images.map((img, i) => (
-              <motion.div
-                key={i}
-                className="relative shrink-0 w-[68%] xs:w-[60%] sm:w-[45%] md:w-[32%] lg:w-[24%] aspect-[4/3] rounded-lg overflow-hidden cursor-pointer"
-                whileHover={{ scale: 1.03, rotate: 0.2 }}
-                whileTap={{ scale: 0.98 }}
-                initial={{ opacity: 0.6, y: 12 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, amount: 0.6 }}
-                transition={{ type: "spring", stiffness: 260, damping: 24 }}
-                onClick={() => handleImageClick(i)}
-              >
-                <img
-                  src={img.src}
-                  alt={img.alt}
-                  className="h-full w-full object-cover"
-                  loading="lazy"
-                />
-                <div className="absolute inset-0 ring-1 ring-inset ring-black/5" />
-              </motion.div>
-            ))}
+        <div className="relative rounded-xl border bg-card/60">
+          <div
+            className="overflow-hidden rounded-xl"
+            ref={emblaRef}
+            style={{
+              maskImage:
+                "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+              WebkitMaskImage:
+                "linear-gradient(to right, transparent, black 6%, black 94%, transparent)",
+            }}
+          >
+            <div className="flex gap-3 p-3">
+              {images.map((img, i) => (
+                <motion.div
+                  key={i}
+                  className="relative shrink-0 w-[68%] xs:w-[60%] sm:w-[45%] md:w-[32%] lg:w-[24%] aspect-[4/3] rounded-lg overflow-hidden cursor-pointer"
+                  whileHover={{ scale: 1.03, rotate: 0.2 }}
+                  whileTap={{ scale: 0.98 }}
+                  initial={{ opacity: 0.6, y: 12 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true, amount: 0.6 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                  onClick={() => handleImageClick(i)}
+                >
+                  <img
+                    src={img.src}
+                    alt={img.alt}
+                    className="h-full w-full object-cover"
+                    loading="lazy"
+                  />
+                  <div className="absolute inset-0 ring-1 ring-inset ring-black/5" />
+                </motion.div>
+              ))}
+            </div>
+          </div>
+
+          <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2">
+            <button
+              type="button"
+              onClick={scrollPrev}
+              aria-label="Назад"
+              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-background/80 shadow border hover:bg-accent/70 backdrop-blur transition"
+            >
+              <ChevronLeft className="h-5 w-5" />
+            </button>
+            <button
+              type="button"
+              onClick={scrollNext}
+              aria-label="Вперёд"
+              className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-background/80 shadow border hover:bg-accent/70 backdrop-blur transition"
+            >
+              <ChevronRight className="h-5 w-5" />
+            </button>
           </div>
         </div>
-
-        <div className="pointer-events-none absolute inset-y-0 left-0 right-0 flex items-center justify-between px-2">
-          <button
-            type="button"
-            onClick={scrollPrev}
-            aria-label="Назад"
-            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-background/80 shadow border hover:bg-accent/70 backdrop-blur transition"
-          >
-            <ChevronLeft className="h-5 w-5" />
-          </button>
-          <button
-            type="button"
-            onClick={scrollNext}
-            aria-label="Вперёд"
-            className="pointer-events-auto inline-flex h-10 w-10 items-center justify-center rounded-full bg-background/80 shadow border hover:bg-accent/70 backdrop-blur transition"
-          >
-            <ChevronRight className="h-5 w-5" />
-          </button>
-        </div>
-      </div>
       </section>
 
       <AnimatePresence>
