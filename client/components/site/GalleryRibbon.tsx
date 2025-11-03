@@ -1,7 +1,7 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 import useEmblaCarousel, { EmblaOptionsType } from "embla-carousel-react";
-import { ChevronLeft, ChevronRight } from "lucide-react";
-import { motion } from "framer-motion";
+import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { motion, AnimatePresence } from "framer-motion";
 
 const images: { src: string; alt: string }[] = [
   {
@@ -150,7 +150,7 @@ const images: { src: string; alt: string }[] = [
   },
   {
     src: "https://cdn.builder.io/api/v1/image/assets%2F34a813691cc14349b2c9685aab1d2252%2F35ed22b33d554840bc92345a612e8d16?format=webp&width=800",
-    alt: "Участники события на мероприятии",
+    alt: "Участники события на меропр��ятии",
   },
   {
     src: "https://cdn.builder.io/api/v1/image/assets%2F34a813691cc14349b2c9685aab1d2252%2F4f12f2c5f8644df98d28bb0ef77a7fa2?format=webp&width=800",
