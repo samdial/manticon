@@ -223,12 +223,22 @@ const options: EmblaOptionsType = {
 
 export default function GalleryRibbon() {
   const [emblaRef, emblaApi] = useEmblaCarousel(options);
+  const [selectedImageIndex, setSelectedImageIndex] = useState<number | null>(null);
 
   const scrollPrev = useCallback(() => emblaApi?.scrollPrev(), [emblaApi]);
   const scrollNext = useCallback(() => emblaApi?.scrollNext(), [emblaApi]);
 
+  const handleImageClick = (index: number) => {
+    setSelectedImageIndex(index);
+  };
+
+  const closeModal = () => {
+    setSelectedImageIndex(null);
+  };
+
   return (
-    <section className="container mt-6 md:mt-10" aria-label="Фотолента">
+    <>
+      <section className="container mt-6 md:mt-10" aria-label="Фотолента">
       <div className="relative rounded-xl border bg-card/60">
         <div
           className="overflow-hidden rounded-xl"
@@ -244,13 +254,14 @@ export default function GalleryRibbon() {
             {images.map((img, i) => (
               <motion.div
                 key={i}
-                className="relative shrink-0 w-[68%] xs:w-[60%] sm:w-[45%] md:w-[32%] lg:w-[24%] aspect-[4/3] rounded-lg overflow-hidden"
+                className="relative shrink-0 w-[68%] xs:w-[60%] sm:w-[45%] md:w-[32%] lg:w-[24%] aspect-[4/3] rounded-lg overflow-hidden cursor-pointer"
                 whileHover={{ scale: 1.03, rotate: 0.2 }}
                 whileTap={{ scale: 0.98 }}
                 initial={{ opacity: 0.6, y: 12 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true, amount: 0.6 }}
                 transition={{ type: "spring", stiffness: 260, damping: 24 }}
+                onClick={() => handleImageClick(i)}
               >
                 <img
                   src={img.src}
@@ -283,6 +294,42 @@ export default function GalleryRibbon() {
           </button>
         </div>
       </div>
-    </section>
+      </section>
+
+      <AnimatePresence>
+        {selectedImageIndex !== null && (
+          <motion.div
+            className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 backdrop-blur-sm"
+            onClick={closeModal}
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
+            transition={{ duration: 0.2 }}
+          >
+            <motion.div
+              className="relative max-w-4xl max-h-[90vh] w-[90%] h-auto"
+              onClick={(e) => e.stopPropagation()}
+              initial={{ scale: 0.8, opacity: 0 }}
+              animate={{ scale: 1, opacity: 1 }}
+              exit={{ scale: 0.8, opacity: 0 }}
+              transition={{ type: "spring", stiffness: 300, damping: 30 }}
+            >
+              <button
+                onClick={closeModal}
+                className="absolute -top-10 right-0 text-white hover:text-gray-300 transition"
+                aria-label="Закрыть"
+              >
+                <X className="h-8 w-8" />
+              </button>
+              <img
+                src={images[selectedImageIndex].src}
+                alt={images[selectedImageIndex].alt}
+                className="w-full h-auto object-contain rounded-lg"
+              />
+            </motion.div>
+          </motion.div>
+        )}
+      </AnimatePresence>
+    </>
   );
 }
