@@ -1,8 +1,9 @@
 import type { IncomingHttpHeaders } from "http";
 
-const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
-const TG_ADMIN_CHAT_ID = process.env.TG_ADMIN_CHAT_ID;
-
+//const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
+//const TG_ADMIN_CHAT_ID = process.env.TG_ADMIN_CHAT_ID;
+const TG_BOT_TOKEN = "8244363844:AAEuXcxW7HDm2YfNK3048Iq9icMvuwoi674";
+const TG_ADMIN_CHAT_ID = "-1003339269630";
 type PlainObject = Record<string, unknown>;
 
 export interface TelegramUserPayload extends PlainObject {
@@ -16,10 +17,13 @@ export interface TelegramUserPayload extends PlainObject {
 }
 
 function ensureEnv(): { token: string; adminChatId: string } | null {
+  console.log("[Telegram] ensureEnv", { TG_BOT_TOKEN, TG_ADMIN_CHAT_ID });
+
   if (!TG_BOT_TOKEN || !TG_ADMIN_CHAT_ID) {
     return null;
   }
   return { token: TG_BOT_TOKEN, adminChatId: TG_ADMIN_CHAT_ID };
+
 }
 
 export function getBotToken(): string | null {
