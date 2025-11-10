@@ -127,7 +127,7 @@ export default function Index() {
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
 
-  const handleRegister = (e: React.FormEvent) => {
+  const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     const chosen = tables.find((t) => t.id === selectedId);
     const ageNum = Number(age);
@@ -157,6 +157,33 @@ export default function Index() {
       toast({
         title: "��ест нет",
         description: "К сожалению, в этом столе уже нет мест.",
+      });
+      return;
+    }
+
+    try {
+      const remainingSeats = chosen.freeSeats - 1;
+      const res = await fetch("/api/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          name: name.trim(),
+          age: ageNum,
+          tableId: chosen.id,
+          masterName: chosen.master,
+          remainingSeats,
+          system: chosen.system,
+        }),
+      });
+      if (!res.ok) {
+        const err = await res.json().catch(() => ({}));
+        throw new Error(err?.error || `HTTP ${res.status}`);
+      }
+    } catch (err) {
+      console.error("Register request failed", err);
+      toast({
+        title: "Ошибка регистрации",
+        description: "Не удалось отправить запрос. Попробуйте ещё раз.",
       });
       return;
     }

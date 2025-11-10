@@ -27,15 +27,72 @@ CREATE TABLE IF NOT EXISTS users (
 console.log("[DB] SQLite подключена:", dbPath);*/
 import { RequestHandler } from "express";
 import { db } from "../db";
+import { notifyRegistration } from "../telegram";
 
 export const handleRegister: RequestHandler = (req, res) => {
-  const { telegram_id, username, first_name, last_name, meta } = req.body;
+  // Support both Telegram-based payloads and simple form: { name, age, tableId }
+  const {
+    telegram_id: telegramIdInput,
+    username,
+    first_name,
+    last_name,
+    meta,
+    name,
+    age,
+    tableId,
+    masterName,
+    remainingSeats,
+    system,
+  } = req.body as {
+    telegram_id?: string;
+    username?: string;
+    first_name?: string;
+    last_name?: string;
+    meta?: unknown;
+    name?: string;
+    age?: string | number;
+    tableId?: string;
+    masterName?: string;
+    remainingSeats?: number;
+    system?: string;
+  };
+
+  console.log("[REGISTER] incoming", {
+    name,
+    age,
+    tableId,
+    telegram_id: telegramIdInput,
+  });
+
+  // If no telegram_id provided, synthesize one to keep DB unique constraint happy
+  const telegram_id =
+    telegramIdInput ||
+    (name ? `local:${name}:${Date.now()}` : undefined);
 
   if (!telegram_id) {
-    return res.status(400).json({ error: "telegram_id required" });
+    console.warn("[REGISTER] rejected: no telegram_id or name");
+    return res.status(400).json({ error: "telegram_id or name required" });
   }
 
   try {
+    // Build final fields
+    const finalUsername = username ?? name ?? null;
+    const finalFirst = first_name ?? null;
+    const finalLast = last_name ?? null;
+    const combinedMeta =
+      meta ??
+      (name || age || tableId
+        ? {
+            name: name ?? null,
+            age: age ?? null,
+            tableId: tableId ?? null,
+            masterName: masterName ?? null,
+            system: system ?? null,
+            remainingSeats:
+              typeof remainingSeats === "number" ? remainingSeats : null,
+          }
+        : null);
+
     const stmt = db.prepare(`
       INSERT INTO users (telegram_id, username, first_name, last_name, meta)
       VALUES (?, ?, ?, ?, ?)
@@ -47,10 +104,10 @@ export const handleRegister: RequestHandler = (req, res) => {
     `);
     stmt.run(
       telegram_id,
-      username || null,
-      first_name || null,
-      last_name || null,
-      meta ? JSON.stringify(meta) : null
+      finalUsername || null,
+      finalFirst || null,
+      finalLast || null,
+      combinedMeta ? JSON.stringify(combinedMeta) : null
     );
 
     const user = db
@@ -58,12 +115,19 @@ export const handleRegister: RequestHandler = (req, res) => {
       .get(telegram_id);
 
     res.status(200).json({ ok: true, user });
-    console.log("[REGISTER] called", req.body);
+    console.log("[REGISTER] success", {
+      telegram_id,
+      username: finalUsername,
+      tableId: (combinedMeta && typeof combinedMeta === "object" && (combinedMeta as any).tableId) || null,
+    });
+
+    // Fire-and-forget Telegram notification
+    void notifyRegistration(user);
 
   } catch (err) {
-    console.error("[REGISTER ERROR]", err);
+    console.error("[REGISTER] error", err);
     res.status(500).json({ error: "internal error" });
-    console.log("[REGISTER] called", req.body);
+    console.log("[REGISTER] failed payload", req.body);
 
   }
 
