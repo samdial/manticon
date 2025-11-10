@@ -4,8 +4,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleRegister } from "./routes/register";
 import { handleTelegramWebhook } from "./routes/tg-webhook";
-
-
+import { startTelegramBot } from "./bot";
 
 export function createServer() {
   const app = express();
@@ -25,6 +24,8 @@ export function createServer() {
   app.post("/api/register", handleRegister);
   app.post("/api/tg-webhook", handleTelegramWebhook);
 
+  // Ensure Telegram bot is running alongside Express (safe to call multiple times)
+  startTelegramBot();
 
   return app;
 }

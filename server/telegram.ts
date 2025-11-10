@@ -1,10 +1,7 @@
 import type { IncomingHttpHeaders } from "http";
 
-//const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
-//const TG_ADMIN_CHAT_ID = process.env.TG_ADMIN_CHAT_ID;
-const TG_BOT_TOKEN = "8244363844:AAEuXcxW7HDm2YfNK3048Iq9icMvuwoi674";
-const TG_ADMIN_CHAT_ID = "-1003339269630";
-
+const TG_BOT_TOKEN = process.env.TG_BOT_TOKEN;
+const TG_ADMIN_CHAT_ID = process.env.TG_ADMIN_CHAT_ID;
 
 type PlainObject = Record<string, unknown>;
 
@@ -23,6 +20,10 @@ function ensureEnv(): { token: string; adminChatId: string } | null {
     return null;
   }
   return { token: TG_BOT_TOKEN, adminChatId: TG_ADMIN_CHAT_ID };
+}
+
+export function getBotToken(): string | null {
+  return TG_BOT_TOKEN ?? null;
 }
 
 function buildMessage(user: TelegramUserPayload): string {
@@ -69,12 +70,23 @@ async function callTelegram(
   headers?: IncomingHttpHeaders,
 ): Promise<void> {
   const url = `https://api.telegram.org/bot${token}/${method}`;
+  const finalHeaders: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+
+  if (headers) {
+    for (const [key, value] of Object.entries(headers)) {
+      if (typeof value === "string") {
+        finalHeaders[key] = value;
+      } else if (Array.isArray(value) && value.length) {
+        finalHeaders[key] = value.join(", ");
+      }
+    }
+  }
+
   await fetch(url, {
     method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-      ...headers,
-    },
+    headers: finalHeaders,
     body: JSON.stringify(body),
   }).then(async (r) => {
     if (!r.ok) {
