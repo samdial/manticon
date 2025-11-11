@@ -32,11 +32,3 @@ services:
       name: manticon-data
       mountPath: /opt/render/project/src/data
       sizeGB: 1
-
-    routes:
-      - type: rewrite
-        source: /telegram-webhook
-        destination: /api/tg-webhook
-      - type: rewrite
-        source: /.*
-        destination: /
