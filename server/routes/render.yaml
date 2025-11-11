@@ -1,0 +1,13 @@
+meta:
+  environment: node
+  toolchain: {}
+routes:
+  - path: /telegram-webhook
+    method: POST
+    handler: tg-webhook.handleTelegramWebhook
+  - path: /telegram-webhook
+    method: POST
+    handler: tg-webhook.handleTelegramWebhook
+  - path: /telegram-webhook
+    method: POST
+    handler: tg-webhook.handleTelegramWebhook
