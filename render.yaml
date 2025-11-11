@@ -1,13 +1,42 @@
-meta:
-  environment: node
-  toolchain: {}
-routes:
-  - path: /telegram-webhook
-    method: POST
-    handler: tg-webhook.handleTelegramWebhook
-  - path: /telegram-webhook
-    method: POST
-    handler: tg-webhook.handleTelegramWebhook
-  - path: /telegram-webhook
-    method: POST
-    handler: tg-webhook.handleTelegramWebhook
+services:
+  - type: web
+    name: manticon
+    env: node
+    plan: free
+    autoDeploy: true
+
+    buildCommand: |
+      corepack enable
+      corepack prepare pnpm@latest --activate
+      pnpm install
+      pnpm build
+
+    startCommand: pnpm start
+    nodeVersion: 22
+
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_PATH
+        value: ./data/app.db
+      - key: PING_MESSAGE
+        value: ping
+      - key: VITE_PUBLIC_BUILDER_KEY
+        value: your-public-key
+      - key: TG_BOT_TOKEN
+        sync: false
+      - key: TG_ADMIN_CHAT_ID
+        sync: false
+
+    disk:
+      name: manticon-data
+      mountPath: /opt/render/project/src/data
+      sizeGB: 1
+
+    routes:
+      - type: rewrite
+        source: /telegram-webhook
+        destination: /api/tg-webhook
+      - type: rewrite
+        source: /.*
+        destination: /
