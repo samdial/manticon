@@ -93,6 +93,20 @@ export const handleRegister: RequestHandler = async (req, res) => {
           }
         : null);
 
+    // Upsert table if provided
+    if (tableId) {
+      await pool.query(
+        `
+          INSERT INTO game_tables (id, master_name, system)
+          VALUES ($1, $2, $3)
+          ON CONFLICT (id) DO UPDATE SET
+            master_name = COALESCE(EXCLUDED.master_name, game_tables.master_name),
+            system = COALESCE(EXCLUDED.system, game_tables.system)
+        `,
+        [tableId, masterName ?? null, system ?? null],
+      );
+    }
+
     const upsertSql = `
       INSERT INTO users (telegram_id, username, first_name, last_name, meta)
       VALUES ($1, $2, $3, $4, $5::jsonb)
@@ -111,7 +125,16 @@ export const handleRegister: RequestHandler = async (req, res) => {
       combinedMeta ? JSON.stringify(combinedMeta) : null,
     ];
     const { rows } = await pool.query(upsertSql, values);
-    const user = rows[0];
+    let user = rows[0];
+
+    // Attach table_id if provided
+    if (tableId) {
+      const { rows: rel } = await pool.query(
+        `UPDATE users SET table_id = $1 WHERE id = $2 RETURNING *`,
+        [tableId, user.id],
+      );
+      user = rel[0] ?? user;
+    }
 
     res.status(200).json({ ok: true, user });
     console.log("[REGISTER] success", {

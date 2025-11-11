@@ -3,6 +3,8 @@ import {
   buildPlayersKeyboard,
   buildPlayersReport,
   buildTableKeyboard,
+  countOrphanedUsersAsync,
+  cleanupOrphanedUsersAsync,
   deletePlayerByIdAsync,
   getTableGroupAsync,
   getTableGroupsAsync,
@@ -22,7 +24,13 @@ async function sendPlayersOverview(chatId: number | string) {
   });
 
   if (groups.length) {
-    const keyboard = buildTableKeyboard(groups);
+    const keyboard = buildTableKeyboard(groups) as any;
+    const orphanCount = await countOrphanedUsersAsync().catch(() => 0);
+    if (orphanCount > 0) {
+      keyboard.inline_keyboard.push([
+        { text: `Удалить несвязанные записи (${orphanCount})`, callback_data: "cleanup:orphans" },
+      ]);
+    }
     await botInstance
       .sendMessage(chatId, "Чтобы удалить игрока, выберите стол:", {
         reply_markup: keyboard,
@@ -137,6 +145,12 @@ export function startTelegramBot(): TelegramBot | null {
         } else {
           await handlePlayerDeletion(chatId, id);
         }
+      } else if (data === "cleanup:orphans") {
+        const deleted = await cleanupOrphanedUsersAsync();
+        await botInstance
+          .sendMessage(chatId, `Удалено несвязанных записей: ${deleted}.`)
+          .catch(() => {});
+        await sendPlayersOverview(chatId);
       }
 
       if (query.id) {

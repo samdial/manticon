@@ -33,16 +33,18 @@ export const handleTelegramWebhook: RequestHandler = async (req, res) => {
     }
 
     if (cdata && cdata.startsWith("del:table:")) {
-      const tableId = cdata.slice("del:table:".length);
+      const raw = cdata.slice("del:table:".length);
+      const tableId = raw === "__none" ? "__none" : raw;
       const group = await getTableGroupAsync(tableId);
       if (!group || !group.players.length) {
-        await sendTelegramMessage(chatId, `В столе ${tableId} пока нет записей.`);
+        const label = tableId === "__none" ? "«Без стола»" : tableId;
+        await sendTelegramMessage(chatId, `В столе ${label} пока нет записей.`);
         return res.status(200).json({ ok: true });
       }
       const keyboard = buildPlayersKeyboard(group);
       await sendTelegramWithMarkup(
         chatId,
-        `Выберите игрока для удаления из стола ${tableId}:`,
+        `Выберите игрока для удаления из стола ${tableId === "__none" ? "«Без стола»" : tableId}:`,
         keyboard,
       );
       return res.status(200).json({ ok: true });
@@ -65,12 +67,44 @@ export const handleTelegramWebhook: RequestHandler = async (req, res) => {
       return res.status(200).json({ ok: true });
     }
 
+    if (cdata === "cleanup:orphans") {
+      const { cleanupOrphanedUsersAsync, getTableGroupsAsync, buildPlayersReport, buildTableKeyboard, countOrphanedUsersAsync } = await import("../players");
+      const deleted = await cleanupOrphanedUsersAsync();
+      await sendTelegramMessage(chatId, `Удалено несвязанных записей: ${deleted}.`);
+      const groups = await getTableGroupsAsync();
+      const report = buildPlayersReport(groups);
+      await sendTelegramMessage(chatId, report || "Список пуст.");
+      if (groups.length) {
+        const keyboard = buildTableKeyboard(groups) as any;
+        const orphanCount = await countOrphanedUsersAsync();
+        if (orphanCount > 0) {
+          keyboard.inline_keyboard.push([
+            { text: `Удалить несвязанные записи (${orphanCount})`, callback_data: "cleanup:orphans" },
+          ]);
+        }
+        await sendTelegramWithMarkup(
+          chatId,
+          "Чтобы удалить игрока, выберите стол:",
+          keyboard,
+        );
+      }
+      return res.status(200).json({ ok: true });
+    }
+
     if (text && text.startsWith("/players")) {
       const groups = await getTableGroupsAsync();
       const report = buildPlayersReport(groups);
       await sendTelegramMessage(chatId, report || "Список пуст.");
       if (groups.length) {
-        const keyboard = buildTableKeyboard(groups);
+        const keyboard = buildTableKeyboard(groups) as any;
+        try {
+          const orphanCount = await (await import("../players")).countOrphanedUsersAsync();
+          if (orphanCount > 0) {
+            keyboard.inline_keyboard.push([
+              { text: `Удалить несвязанные записи (${orphanCount})`, callback_data: "cleanup:orphans" },
+            ]);
+          }
+        } catch {}
         await sendTelegramWithMarkup(
           chatId,
           "Чтобы удалить игрока, выберите стол:",
