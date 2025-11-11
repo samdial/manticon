@@ -1,4 +1,4 @@
-import { db } from "./db";
+import { pool } from "./db";
 
 export type PlayerMeta = {
   name?: string | null;
@@ -16,7 +16,7 @@ export type PlayerRow = {
   first_name: string | null;
   last_name: string | null;
   registered_at: string;
-  meta: string | null;
+  meta: unknown | null;
 };
 
 export type PlayerEntry = {
@@ -35,13 +35,19 @@ export type TableGroup = {
   players: PlayerEntry[];
 };
 
-export function safeParseMeta(meta: string | null): PlayerMeta {
-  if (!meta) return {};
-  try {
-    return JSON.parse(meta) as PlayerMeta;
-  } catch {
-    return {};
+export function safeParseMeta(meta: unknown | null): PlayerMeta {
+  if (meta == null) return {};
+  if (typeof meta === "object") {
+    return meta as PlayerMeta;
   }
+  if (typeof meta === "string") {
+    try {
+      return JSON.parse(meta) as PlayerMeta;
+    } catch {
+      return {};
+    }
+  }
+  return {};
 }
 
 function mapName(meta: PlayerMeta, fallback?: string | null): string {
@@ -63,9 +69,14 @@ export function mapRow(row: PlayerRow): { entry: PlayerEntry; tableId: string; m
 }
 
 export function getTableGroups(): TableGroup[] {
-  const rows = db
-    .prepare<PlayerRow>("SELECT * FROM users ORDER BY registered_at ASC")
-    .all();
+  // This synchronous wrapper is kept for compatibility; actual query is async below.
+  throw new Error("getTableGroups is async; use getTableGroupsAsync()");
+}
+
+export async function getTableGroupsAsync(): Promise<TableGroup[]> {
+  const { rows } = await pool.query<PlayerRow>(
+    "SELECT * FROM users ORDER BY registered_at ASC",
+  );
 
   const byTable = new Map<string, TableGroup>();
 
@@ -103,46 +114,77 @@ export function getTableGroups(): TableGroup[] {
   return groups;
 }
 
-export function getTableGroup(tableId: string): TableGroup | undefined {
-  const groups = getTableGroups();
-  return groups.find((g) => g.tableId === tableId);
+export async function getTableGroupAsync(tableId: string): Promise<TableGroup | undefined> {
+  const { rows } = await pool.query<PlayerRow>(
+    "SELECT * FROM users WHERE (meta->>'tableId') = $1 ORDER BY registered_at ASC",
+    [tableId],
+  );
+  const byTable = new Map<string, TableGroup>();
+  for (const row of rows) {
+    const { entry, tableId: tid, meta } = mapRow(row);
+    const group =
+      byTable.get(tid) ??
+      {
+        tableId: tid,
+        players: [],
+      };
+    if (meta.masterName) group.masterName = meta.masterName;
+    if (meta.system) group.system = meta.system;
+    if (
+      typeof meta.remainingSeats === "number" &&
+      (group.remainingSeats === undefined ||
+        group.remainingSeats === null ||
+        meta.remainingSeats < group.remainingSeats)
+    ) {
+      group.remainingSeats = meta.remainingSeats;
+    }
+    group.players.push(entry);
+    byTable.set(tid, group);
+  }
+  return Array.from(byTable.values())[0];
 }
 
-export function deletePlayerById(id: number): PlayerEntry | null {
-  const row = db.prepare<PlayerRow>("SELECT * FROM users WHERE id = ?").get(id);
-  if (!row) return null;
-  db.prepare("DELETE FROM users WHERE id = ?").run(id);
-  return mapRow(row).entry;
+export async function deletePlayerByIdAsync(id: number): Promise<PlayerEntry | null> {
+  const { rows } = await pool.query<PlayerRow>("DELETE FROM users WHERE id = $1 RETURNING *", [id]);
+  if (!rows.length) return null;
+  return mapRow(rows[0]).entry;
 }
 
 export function buildPlayersReport(groups: TableGroup[]): string {
   if (!groups.length) {
     return "";
   }
-  const sections = groups.map((group) => {
-    const header = `стол ${group.tableId} мастер ${group.masterName ?? "-"}, система ${group.system ?? "-"}, свободных мест: ${group.remainingSeats ?? "-"}.`;
+  const sections: string[] = [];
+  groups.forEach((group, idx) => {
+    const header = `Стол ${group.tableId}, мастер: ${group.masterName ?? "-"}, система: ${group.system ?? "-"}`;
     const players = group.players
       .map((player) => {
         const age =
           player.age !== undefined &&
           player.age !== null &&
           String(player.age).trim() !== ""
-            ? `, ${player.age} лет`
+            ? `, ${player.age}`
             : "";
         return `- ${player.name}${age}`;
       })
       .join("\n");
-    return `${header}\n\n${players}`;
+    const section = `${header}:\n\n${players}`;
+    sections.push(section);
+    if (idx < groups.length - 1) {
+      sections.push("\n-------------------------------");
+    }
   });
-
-  return sections.join("\n\n\n");
+  return sections.join("\n");
 }
 
 export function buildTableKeyboard(groups: TableGroup[]) {
   return {
     inline_keyboard: groups.map((group) => [
       {
-        text: `Удалить из стола ${group.tableId}`,
+        text:
+          group.tableId === "—"
+            ? "Удалить из стола «Без стола»"
+            : `Удалить из стола ${group.tableId}`,
         callback_data: `del:table:${group.tableId}`,
       },
     ]),

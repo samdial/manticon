@@ -26,10 +26,10 @@ CREATE TABLE IF NOT EXISTS users (
 
 console.log("[DB] SQLite подключена:", dbPath);*/
 import { RequestHandler } from "express";
-import { db } from "../db";
+import { pool } from "../db";
 import { notifyRegistration } from "../telegram";
 
-export const handleRegister: RequestHandler = (req, res) => {
+export const handleRegister: RequestHandler = async (req, res) => {
   // Support both Telegram-based payloads and simple form: { name, age, tableId }
   const {
     telegram_id: telegramIdInput,
@@ -93,32 +93,34 @@ export const handleRegister: RequestHandler = (req, res) => {
           }
         : null);
 
-    const stmt = db.prepare(`
+    const upsertSql = `
       INSERT INTO users (telegram_id, username, first_name, last_name, meta)
-      VALUES (?, ?, ?, ?, ?)
-      ON CONFLICT(telegram_id) DO UPDATE SET
-        username=excluded.username,
-        first_name=excluded.first_name,
-        last_name=excluded.last_name,
-        meta=excluded.meta
-    `);
-    stmt.run(
+      VALUES ($1, $2, $3, $4, $5::jsonb)
+      ON CONFLICT (telegram_id) DO UPDATE SET
+        username = EXCLUDED.username,
+        first_name = EXCLUDED.first_name,
+        last_name = EXCLUDED.last_name,
+        meta = EXCLUDED.meta
+      RETURNING *;
+    `;
+    const values = [
       telegram_id,
-      finalUsername || null,
-      finalFirst || null,
-      finalLast || null,
-      combinedMeta ? JSON.stringify(combinedMeta) : null
-    );
-
-    const user = db
-      .prepare("SELECT * FROM users WHERE telegram_id = ?")
-      .get(telegram_id);
+      finalUsername,
+      finalFirst,
+      finalLast,
+      combinedMeta ? JSON.stringify(combinedMeta) : null,
+    ];
+    const { rows } = await pool.query(upsertSql, values);
+    const user = rows[0];
 
     res.status(200).json({ ok: true, user });
     console.log("[REGISTER] success", {
       telegram_id,
       username: finalUsername,
-      tableId: (combinedMeta && typeof combinedMeta === "object" && (combinedMeta as any).tableId) || null,
+      tableId:
+        combinedMeta && typeof combinedMeta === "object"
+          ? (combinedMeta as any).tableId
+          : null,
     });
 
     // Fire-and-forget Telegram notification

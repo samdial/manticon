@@ -1,0 +1,36 @@
+version: "3.9"
+
+services:
+  manticon:
+    build: .
+    container_name: manticon
+    restart: unless-stopped
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: "production"
+      # Set your real values here or via env file
+      TG_BOT_TOKEN: "${TG_BOT_TOKEN}"
+      TG_ADMIN_CHAT_ID: "${TG_ADMIN_CHAT_ID}"
+      DATABASE_URL: "postgresql://postgres:postgres@postgres:5432/manticon"
+    volumes:
+      - manticon_data:/data
+    depends_on:
+      - postgres
+
+  postgres:
+    image: postgres:16-alpine
+    container_name: manticon-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: manticon
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+
+volumes:
+  manticon_data:
+  pg_data:
+
+

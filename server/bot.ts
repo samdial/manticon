@@ -3,9 +3,9 @@ import {
   buildPlayersKeyboard,
   buildPlayersReport,
   buildTableKeyboard,
-  deletePlayerById,
-  getTableGroup,
-  getTableGroups,
+  deletePlayerByIdAsync,
+  getTableGroupAsync,
+  getTableGroupsAsync,
 } from "./players";
 import { getBotToken } from "./telegram";
 
@@ -14,7 +14,7 @@ let botStarting = false;
 
 async function sendPlayersOverview(chatId: number | string) {
   if (!botInstance) return;
-  const groups = getTableGroups();
+  const groups = await getTableGroupsAsync();
   const report = buildPlayersReport(groups);
 
   await botInstance.sendMessage(chatId, report || "Список пуст.").catch((err) => {
@@ -35,7 +35,7 @@ async function sendPlayersOverview(chatId: number | string) {
 
 async function handleTableSelection(chatId: number | string, tableId: string) {
   if (!botInstance) return;
-  const group = getTableGroup(tableId);
+  const group = await getTableGroupAsync(tableId);
   if (!group || !group.players.length) {
     await botInstance
       .sendMessage(chatId, `В столе ${tableId} пока нет записей.`)
@@ -56,7 +56,7 @@ async function handleTableSelection(chatId: number | string, tableId: string) {
 
 async function handlePlayerDeletion(chatId: number | string, id: number) {
   if (!botInstance) return;
-  const removed = deletePlayerById(id);
+  const removed = await deletePlayerByIdAsync(id);
   if (!removed) {
     await botInstance
       .sendMessage(chatId, "Игрок уже удалён или не найден.")

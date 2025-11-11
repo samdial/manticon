@@ -1,26 +1,24 @@
-import Database from "better-sqlite3";
-import path from "path";
-import fs from "fs";
+import { Pool } from "pg";
 
-const dbPath = process.env.DB_PATH || path.join(process.cwd(), "data", "app.db");
+const DEFAULT_URL =
+  process.env.DATABASE_URL ||
+  "postgresql://postgres:postgres@postgres:5432/postgres";
 
-// создаём файл, если нет
-fs.mkdirSync(path.dirname(dbPath), { recursive: true });
+export const pool = new Pool({
+  connectionString: DEFAULT_URL,
+});
 
-// подключаемся
-export const db = new Database(dbPath);
-
-// создаём таблицу, если не существует
-db.exec(`
-CREATE TABLE IF NOT EXISTS users (
-  id INTEGER PRIMARY KEY AUTOINCREMENT,
-  telegram_id TEXT UNIQUE,
-  username TEXT,
-  first_name TEXT,
-  last_name TEXT,
-  registered_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-  meta TEXT
-);
-`);
-
-console.log("[DB] SQLite подключена:", dbPath);
+export async function initDb(): Promise<void> {
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS users (
+      id SERIAL PRIMARY KEY,
+      telegram_id TEXT UNIQUE,
+      username TEXT,
+      first_name TEXT,
+      last_name TEXT,
+      registered_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+      meta JSONB
+    );
+  `);
+  console.log("[DB] Postgres connected:", DEFAULT_URL.replace(/:[^:@/]+@/, "://****@"));
+}

@@ -35,7 +35,7 @@ data
 .env
 load-ids.txt
 
-server
+# server code must be included for build
 tmp
 types
 .git

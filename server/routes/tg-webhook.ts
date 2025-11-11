@@ -3,9 +3,9 @@ import {
   buildPlayersKeyboard,
   buildPlayersReport,
   buildTableKeyboard,
-  deletePlayerById,
-  getTableGroup,
-  getTableGroups,
+  deletePlayerByIdAsync,
+  getTableGroupAsync,
+  getTableGroupsAsync,
 } from "../players";
 import { sendTelegramMessage, sendTelegramWithMarkup } from "../telegram";
 
@@ -34,7 +34,7 @@ export const handleTelegramWebhook: RequestHandler = async (req, res) => {
 
     if (cdata && cdata.startsWith("del:table:")) {
       const tableId = cdata.slice("del:table:".length);
-      const group = getTableGroup(tableId);
+      const group = await getTableGroupAsync(tableId);
       if (!group || !group.players.length) {
         await sendTelegramMessage(chatId, `В столе ${tableId} пока нет записей.`);
         return res.status(200).json({ ok: true });
@@ -55,7 +55,7 @@ export const handleTelegramWebhook: RequestHandler = async (req, res) => {
         await sendTelegramMessage(chatId, "Некорректный идентификатор игрока.");
         return res.status(200).json({ ok: true });
       }
-      const removed = deletePlayerById(id);
+      const removed = await deletePlayerByIdAsync(id);
       if (!removed) {
         await sendTelegramMessage(chatId, "Игрок уже удалён или не найден.");
         return res.status(200).json({ ok: true });
@@ -66,7 +66,7 @@ export const handleTelegramWebhook: RequestHandler = async (req, res) => {
     }
 
     if (text && text.startsWith("/players")) {
-      const groups = getTableGroups();
+      const groups = await getTableGroupsAsync();
       const report = buildPlayersReport(groups);
       await sendTelegramMessage(chatId, report || "Список пуст.");
       if (groups.length) {

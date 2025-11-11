@@ -5,6 +5,7 @@ import { handleDemo } from "./routes/demo";
 import { handleRegister } from "./routes/register";
 import { handleTelegramWebhook } from "./routes/tg-webhook";
 import { startTelegramBot } from "./bot";
+import { initDb } from "./db";
 
 export function createServer() {
   const app = express();
@@ -13,6 +14,11 @@ export function createServer() {
   app.use(cors());
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+
+  // Initialize database
+  void initDb().catch((err) => {
+    console.error("[DB] init error", err);
+  });
 
   // Example API routes
   app.get("/api/ping", (_req, res) => {
