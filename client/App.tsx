@@ -20,7 +20,7 @@ const App = () => (
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
-            {/* ADD ALL C USTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+            {/* ADD ALL C UST      OM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Route>
         </Routes>
@@ -32,7 +32,6 @@ const App = () => (
 const container = document.getElementById("root");
 if (!container) throw new Error("Root container #root not found");
 
-// Reuse the same root across HMR to avoid double createRoot()
 const w = window as unknown as { __mantikon_root?: Root };
 const root = w.__mantikon_root ?? createRoot(container);
 w.__mantikon_root = root;
