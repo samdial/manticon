@@ -74,11 +74,23 @@ export default function Layout() {
             </ul>
           </div>
           <div>
-            <div className="font-semibold mb-2">Контакты</div>
-            <p className="text-muted-foreground">
-              https://vk.com/id4883678
-            </p>
-            <p className="text-muted-foreground">VK: https://vk.com/dicecraftclub?</p>
+          <div className="font-semibold mb-2">Контакты</div>
+<a 
+  href="https://vk.com/id4883678" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="text-muted-foreground block hover:text-amber-600 transition-colors"
+>
+  https://vk.com/id4883678
+</a>
+<a 
+  href="https://vk.com/dicecraftclub" 
+  target="_blank" 
+  rel="noopener noreferrer"
+  className="text-muted-foreground block hover:text-amber-600 transition-colors"
+>
+  VK: https://vk.com/dicecraftclub
+</a>
           </div>
         </div>
       </footer>
