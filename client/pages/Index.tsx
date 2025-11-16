@@ -522,7 +522,7 @@ export default function Index() {
                 />
               </div>
               <div>
-                <Label htmlFor="age">Страничка в соцсетях, по которой с тобой можно связаться (VK, TG)</Label>
+                <Label htmlFor="age">Как с тобой связаться (VK, TG)</Label>
                 <Input
                   id="age"
                   className="mt-1"
