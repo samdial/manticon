@@ -76,9 +76,9 @@ export default function Layout() {
           <div>
             <div className="font-semibold mb-2">Контакты</div>
             <p className="text-muted-foreground">
-              Email: info@mantikon.example
+              https://vk.com/id4883678
             </p>
-            <p className="text-muted-foreground">VK: vk.com/mantikon</p>
+            <p className="text-muted-foreground">VK: https://vk.com/dicecraftclub?</p>
           </div>
         </div>
       </footer>

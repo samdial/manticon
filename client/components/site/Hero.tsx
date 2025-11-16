@@ -21,7 +21,7 @@ export default function Hero() {
             Конвент НРИ «Мантикон»
           </h1>
           <p className="mt-3 text-card-foreground/90 max-w-2xl text-base md:text-lg drop-shadow-[0_1px_4px_rgba(0,0,0,0.4)]">
-            Широкое фото в шапке. Истории, приключения и новые знакомства.
+            Истории, приключения и новые знакомства.
             Присоединяйтесь к крупнейшему фестивалю настольных ролевых игр.
           </p>
           <div className="mt-6 flex flex-wrap gap-3">
