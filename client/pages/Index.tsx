@@ -542,82 +542,148 @@ export default function Index() {
       </section>
 
       <section id="sponsors" className="container mt-12 mb-20">
-        <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-amber-900 dark:text-amber-100 mb-6 text-center">
-          Спонсоры
-        </h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-          {[
-            {
-              name: "Таверна Мудреца",
-              description: "Сеть кафе настольных игр",
-              image:
-                "https://images.unsplash.com/photo-1495521821757-a1efb6729352?q=80&w=400&auto=format&fit=crop",
-              link: "https://example.com",
-            },
-            {
-              name: "DragonSkull Games",
-              description: "Издатель настольных ролевых игр",
-              image:
-                "https://images.unsplash.com/photo-1552820728-8ac41f1ce891?q=80&w=400&auto=format&fit=crop",
-              link: "https://example.com",
-            },
-            {
-              name: "Экспедиция",
-              description: "Туристическое агентство",
-              image:
-                "https://images.unsplash.com/photo-1488646953014-85cb44e25828?q=80&w=400&auto=format&fit=crop",
-              link: "https://example.com",
-            },
-            {
-              name: "Райские Миры",
-              description: "Специализированный магазин",
-              image:
-                "https://images.unsplash.com/photo-1570303540540-25e0e5b2eb9a?q=80&w=400&auto=format&fit=crop",
-              link: "https://example.com",
-            },
-            {
-              name: "Ночной Орден",
-              description: "Баланс игровых правил",
-              image:
-                "https://images.unsplash.com/photo-1552765069-5c63e89b51c7?q=80&w=400&auto=format&fit=crop",
-              link: "https://example.com",
-            },
-            {
-              name: "Легенда",
-              description: "Сообщество неклассических RPG",
-              image:
-                "https://images.unsplash.com/photo-1532012197267-da84d127e765?q=80&w=400&auto=format&fit=crop",
-              link: "https://example.com",
-            },
-          ].map((sponsor, i) => (
-            <a
-              key={i}
-              href={sponsor.link}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="group"
-            >
-              <Card className="h-full overflow-hidden transition-all hover:shadow-lg hover:border-amber-200 dark:hover:border-amber-800">
-                <div className="overflow-hidden h-40">
-                  <img
-                    src={sponsor.image}
-                    alt={sponsor.name}
-                    className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-                  />
-                </div>
-                <CardContent className="p-4">
-                  <h3 className="font-semibold text-lg text-amber-900 dark:text-amber-100 mb-1">
-                    {sponsor.name}
-                  </h3>
-                  <p className="text-sm text-muted-foreground">
-                    {sponsor.description}
-                  </p>
-                </CardContent>
-              </Card>
-            </a>
-          ))}
-        </div>
-      </section>
+  <h2 className="text-3xl md:text-4xl font-display font-bold tracking-tight text-amber-900 dark:text-amber-100 mb-6 text-center">
+    Спонсоры
+  </h2>
+  <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+    {[
+      {
+        name: "DeadFish Crew",
+        description: "Сеть кафе настольных игр",
+        image: "/client/img/1.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "DragonSkull Games",
+        description: "Издатель настольных ролевых игр",
+        image: "/client/img/2.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 3",
+        description: "Описание издательства 3",
+        image: "/client/img/3.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 4",
+        description: "Описание издательства 4",
+        image: "/client/img/4.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 5",
+        description: "Описание издательства 5",
+        image: "/client/img/5.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Экспедиция",
+        description: "Туристическое агентство",
+        image: "/client/img/6.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Райские Миры",
+        description: "Специализированный магазин",
+        image: "/client/img/7.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Ночной Орден",
+        description: "Баланс игровых правил",
+        image: "/client/img/8.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Легенда",
+        description: "Сообщество неклассических RPG",
+        image: "/client/img/9.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 10",
+        description: "Описание издательства 10",
+        image: "/client/img/10.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 11",
+        description: "Описание издательства 11",
+        image: "/client/img/11.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 12",
+        description: "Описание издательства 12",
+        image: "/client/img/12.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 13",
+        description: "Описание издательства 13",
+        image: "/client/img/13.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 14",
+        description: "Описание издательства 14",
+        image: "/client/img/14.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 15",
+        description: "Описание издательства 15",
+        image: "/client/img/15.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 16",
+        description: "Описание издательства 16",
+        image: "/client/img/16.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 17",
+        description: "Описание издательства 17",
+        image: "/client/img/17.webp",
+        link: "https://example.com",
+      },
+      {
+        name: "Издательство 18",
+        description: "Описание издательства 18",
+        image: "/client/img/18.webp",
+        link: "https://example.com",
+      },
+    ].map((sponsor, i) => (
+      <a
+        key={i}
+        href={sponsor.link}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="group"
+      >
+        <Card className="h-full overflow-hidden transition-all hover:shadow-lg hover:border-amber-200 dark:hover:border-amber-800">
+          <div className="overflow-hidden h-40">
+            <img
+              src={`${sponsor.image}?q=80&w=400&auto=format&fit=crop`}
+              alt={sponsor.name}
+              className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          </div>
+          <CardContent className="p-4">
+            <h3 className="font-semibold text-lg text-amber-900 dark:text-amber-100 mb-1">
+              {sponsor.name}
+            </h3>
+            <p className="text-sm text-muted-foreground">
+              {sponsor.description}
+            </p>
+          </CardContent>
+        </Card>
+      </a>
+    ))}
+  </div>
+</section>
     </div>
   );
 }
