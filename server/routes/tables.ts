@@ -16,6 +16,22 @@ export interface GameTableResponse {
 
 export const handleGetTables: RequestHandler = async (_req, res) => {
   try {
+    console.log("[TABLES] Fetching tables from database...");
+    
+    // First, check if table exists
+    const tableCheck = await pool.query(`
+      SELECT EXISTS (
+        SELECT FROM information_schema.tables 
+        WHERE table_name = 'game_tables'
+      );
+    `);
+    
+    if (!tableCheck.rows[0]?.exists) {
+      console.warn("[TABLES] Table game_tables does not exist yet");
+      return res.status(200).json({ tables: [] });
+    }
+    
+    // Simplified query without complex ORDER BY
     const { rows } = await pool.query<GameTableResponse>(
       `
       SELECT 
@@ -30,18 +46,23 @@ export const handleGetTables: RequestHandler = async (_req, res) => {
         pregens,
         player_count
       FROM game_tables
-      ORDER BY 
-        CASE 
-          WHEN id ~ '^[0-9]+$' THEN id::INTEGER
-          ELSE 999999
-        END,
-        id
+      ORDER BY id
       `,
     );
+    console.log("[TABLES] Found", rows.length, "tables");
     res.status(200).json({ tables: rows });
   } catch (err) {
-    console.error("[TABLES] error", err);
-    res.status(500).json({ error: "Failed to fetch tables" });
+    console.error("[TABLES] Database error:", err);
+    const errorMessage = err instanceof Error ? err.message : String(err);
+    const errorStack = err instanceof Error ? err.stack : undefined;
+    console.error("[TABLES] Error details:", errorMessage);
+    if (errorStack) {
+      console.error("[TABLES] Stack trace:", errorStack);
+    }
+    res.status(500).json({ 
+      error: "Failed to fetch tables",
+      details: errorMessage 
+    });
   }
 };
 

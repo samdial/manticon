@@ -23,8 +23,21 @@ function buildDatabaseUrl(): string {
 
 const DEFAULT_URL = buildDatabaseUrl();
 
+console.log("[DB] Building connection string...");
+const maskedUrl = DEFAULT_URL.replace(/:[^:@/]+@/, ":****@");
+console.log("[DB] Connection string:", maskedUrl);
+
 export const pool = new Pool({
   connectionString: DEFAULT_URL,
+});
+
+// Test connection on startup
+pool.on("error", (err) => {
+  console.error("[DB] Unexpected error on idle client", err);
+});
+
+pool.on("connect", () => {
+  console.log("[DB] New client connected");
 });
 
 export async function initDb(): Promise<void> {
