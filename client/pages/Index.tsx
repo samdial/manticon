@@ -97,9 +97,6 @@ function TableRow({ table }: { table: GameTable }) {
           "-"
         )}
       </td>
-      <td className="px-4 py-3">{table.novices || "-"}</td>
-      <td className="px-4 py-3">{table.age_range || "-"}</td>
-      <td className="px-4 py-3">{table.pregens || "-"}</td>
       <td className="px-4 py-3">
         <span
           className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
@@ -368,9 +365,6 @@ export default function Index() {
                       <th className="px-4 py-3">Мастер</th>
                       <th className="px-4 py-3">Название приключения</th>
                       <th className="px-4 py-3">Описание</th>
-                      <th className="px-4 py-3">Новички</th>
-                      <th className="px-4 py-3">Возраст</th>
-                      <th className="px-4 py-3">Прегены</th>
                       <th className="px-4 py-3">Число игроков</th>
                     </tr>
                   </thead>
@@ -407,11 +401,6 @@ export default function Index() {
                     {t.description && (
                       <TableRowDescription description={t.description} />
                     )}
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      {t.novices && <div>Новички: {t.novices}</div>}
-                      {t.age_range && <div>Возраст: {t.age_range}</div>}
-                      {t.pregens && <div>Прегены: {t.pregens}</div>}
-                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -432,9 +421,6 @@ export default function Index() {
                       <th className="px-4 py-3">Мастер</th>
                       <th className="px-4 py-3">Название приключения</th>
                       <th className="px-4 py-3">Описание</th>
-                      <th className="px-4 py-3">Новички</th>
-                      <th className="px-4 py-3">Возраст</th>
-                      <th className="px-4 py-3">Прегены</th>
                       <th className="px-4 py-3">Число игроков</th>
                     </tr>
                   </thead>
@@ -471,11 +457,6 @@ export default function Index() {
                     {t.description && (
                       <TableRowDescription description={t.description} />
                     )}
-                    <div className="grid grid-cols-2 gap-2 text-xs">
-                      {t.novices && <div>Новички: {t.novices}</div>}
-                      {t.age_range && <div>Возраст: {t.age_range}</div>}
-                      {t.pregens && <div>Прегены: {t.pregens}</div>}
-                    </div>
                   </CardContent>
                 </Card>
               ))}
