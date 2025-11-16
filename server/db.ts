@@ -1,8 +1,27 @@
 import { Pool } from "pg";
 
-const DEFAULT_URL =
-  process.env.DATABASE_URL ||
-  "postgresql://postgres:postgres@postgres:5432/postgres";
+function buildDatabaseUrl(): string {
+  // If DATABASE_URL is explicitly set, use it
+  if (process.env.DATABASE_URL) {
+    return process.env.DATABASE_URL;
+  }
+
+  // Otherwise, try to build from individual components
+  const host = process.env.POSTGRESQL_HOST || process.env.PG_HOST || "postgres";
+  const port = process.env.POSTGRESQL_PORT || process.env.PG_PORT || "5432";
+  const user = process.env.POSTGRESQL_USER || process.env.PG_USER || "postgres";
+  const password =
+    process.env.POSTGRESQL_PASSWORD || process.env.PG_PASSWORD || "postgres";
+  const database =
+    process.env.POSTGRESQL_DBNAME ||
+    process.env.POSTGRESQL_DB ||
+    process.env.PG_DATABASE ||
+    "postgres";
+
+  return `postgresql://${user}:${password}@${host}:${port}/${database}`;
+}
+
+const DEFAULT_URL = buildDatabaseUrl();
 
 export const pool = new Pool({
   connectionString: DEFAULT_URL,
