@@ -122,6 +122,7 @@ export default function Index() {
         const res = await fetch("/api/tables");
         if (!res.ok) throw new Error("Failed to fetch tables");
         const data = await res.json();
+        console.log("[Tables] Loaded:", data.tables?.length || 0, "tables");
         setTables(data.tables || []);
       } catch (err) {
         console.error("Failed to load tables:", err);
@@ -356,6 +357,10 @@ export default function Index() {
               <div className="text-center py-8 text-muted-foreground">
                 Загрузка...
               </div>
+            ) : morningTables.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Столы пока не добавлены. Данные появятся после заполнения базы данных.
+              </div>
             ) : (
               <div className="hidden md:block overflow-x-auto rounded-lg border">
                 <table className="w-full text-sm">
@@ -411,6 +416,10 @@ export default function Index() {
             {loading ? (
               <div className="text-center py-8 text-muted-foreground">
                 Загрузка...
+              </div>
+            ) : afternoonTables.length === 0 ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Столы пока не добавлены. Данные появятся после заполнения базы данных.
               </div>
             ) : (
               <div className="hidden md:block overflow-x-auto rounded-lg border">
