@@ -40,6 +40,16 @@ export async function initDb(): Promise<void> {
     ALTER TABLE game_tables
     ADD COLUMN IF NOT EXISTS remaining_seats INT;
   `);
+  // Add new columns for expanded table information
+  await pool.query(`
+    ALTER TABLE game_tables
+    ADD COLUMN IF NOT EXISTS adventure_name TEXT,
+    ADD COLUMN IF NOT EXISTS description TEXT,
+    ADD COLUMN IF NOT EXISTS novices TEXT,
+    ADD COLUMN IF NOT EXISTS age_range TEXT,
+    ADD COLUMN IF NOT EXISTS pregens TEXT,
+    ADD COLUMN IF NOT EXISTS player_count INT;
+  `);
   // Best-effort backfill remaining_seats from legacy users.meta.remainingSeats (minimum per table)
   await pool.query(`
     WITH per_table AS (

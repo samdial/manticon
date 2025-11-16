@@ -4,6 +4,7 @@ import cors from "cors";
 import { handleDemo } from "./routes/demo";
 import { handleRegister } from "./routes/register";
 import { handleTelegramWebhook } from "./routes/tg-webhook";
+import { handleGetTables } from "./routes/tables";
 import { startTelegramBot } from "./bot";
 import { initDb } from "./db";
 
@@ -27,6 +28,7 @@ export function createServer() {
   });
 
   app.get("/api/demo", handleDemo);
+  app.get("/api/tables", handleGetTables);
   app.post("/api/register", handleRegister);
   app.post("/api/tg-webhook", handleTelegramWebhook);
 

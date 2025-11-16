@@ -14,8 +14,28 @@ import {
 } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { toast } from "@/hooks/use-toast";
+import {
+  Collapsible,
+  CollapsibleContent,
+  CollapsibleTrigger,
+} from "@/components/ui/collapsible";
+import { ChevronDown } from "lucide-react";
 
 export type GameTable = {
+  id: string;
+  master_name: string | null;
+  system: string | null;
+  remaining_seats: number | null;
+  adventure_name: string | null;
+  description: string | null;
+  novices: string | null;
+  age_range: string | null;
+  pregens: string | null;
+  player_count: number | null;
+};
+
+// Legacy type for backward compatibility
+type LegacyGameTable = {
   id: string;
   master: string;
   system: string;
@@ -23,99 +43,105 @@ export type GameTable = {
   freeSeats: number;
 };
 
-const STORAGE_KEY = "mantikon.tables.v1";
+// Component for collapsible description
+function TableRowDescription({ description }: { description: string }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const needsCollapse = description.length > 100;
+  const shortDesc = needsCollapse
+    ? description.slice(0, 100) + "..."
+    : description;
 
-function generateInitialTables(): GameTable[] {
-  const masters = [
-    "Аристарх",
-    "Белла",
-    "Варг",
-    "Грета",
-    "Дарий",
-    "Елена",
-    "Жанна",
-    "Земовит",
-    "Илларион",
-    "Ки��а",
-    "Люций",
-    "Милана",
-    "Нестор",
-    "Ольга",
-    "Павел",
-    "Рада",
-    "Свят",
-    "Тамара",
-    "Ульяна",
-    "Феликс",
-    "Хельга",
-    "Цезарь",
-    "Чара",
-    "Шандор",
-    "Щука",
-    "Элла",
-    "Юлиан",
-    "Яромир",
-    "Мира",
-    "Степан",
-  ];
-  const systems = [
-    "D&D 5e",
-    "Pathfinder 2e",
-    "Call of Cthulhu",
-    "Blades in the Dark",
-    "Fate Core",
-    "Savage Worlds",
-  ];
-  const themes = [
-    "городское фэнтези",
-    "космическая опера",
-    "детективный хоррор",
-    "плащи и кинжалы",
-    "кл��ссическое приключение",
-    "мистика и заговоры",
-  ];
+  return (
+    <Collapsible open={isOpen} onOpenChange={setIsOpen}>
+      <div className="space-y-1">
+        <div className={needsCollapse && !isOpen ? "line-clamp-2" : ""}>
+          {isOpen ? description : shortDesc}
+        </div>
+        {needsCollapse && (
+          <CollapsibleTrigger asChild>
+            <button className="text-xs text-primary hover:underline flex items-center gap-1">
+              {isOpen ? (
+                <>
+                  Свернуть <ChevronDown className="h-3 w-3 rotate-180" />
+                </>
+              ) : (
+                <>
+                  Развернуть <ChevronDown className="h-3 w-3" />
+                </>
+              )}
+            </button>
+          </CollapsibleTrigger>
+        )}
+      </div>
+    </Collapsible>
+  );
+}
 
-  const tables: GameTable[] = Array.from({ length: 30 }, (_, i) => {
-    const m = masters[i % masters.length];
-    const sys = systems[i % systems.length];
-    const theme = themes[i % themes.length];
-    const seats = 3 + ((i * 7) % 4); // 3..6 мест
-    return {
-      id: (i + 1).toString(),
-      master: `Мастер ${m}`,
-      system: sys,
-      description: `Одноразовый сюжет на тему: ${theme}. Темп средний, упор на атмосферу и командную игру.`,
-      freeSeats: seats,
-    };
-  });
-  return tables;
+// Component for table row with collapsible description
+function TableRow({ table }: { table: GameTable }) {
+  const description = table.description || "";
+
+  return (
+    <tr className="border-t">
+      <td className="px-4 py-3 text-muted-foreground">
+        {table.system || "-"}
+      </td>
+      <td className="px-4 py-3 font-medium">
+        {table.master_name || "-"}
+      </td>
+      <td className="px-4 py-3">{table.adventure_name || "-"}</td>
+      <td className="px-4 py-3">
+        {description ? (
+          <TableRowDescription description={description} />
+        ) : (
+          "-"
+        )}
+      </td>
+      <td className="px-4 py-3">{table.novices || "-"}</td>
+      <td className="px-4 py-3">{table.age_range || "-"}</td>
+      <td className="px-4 py-3">{table.pregens || "-"}</td>
+      <td className="px-4 py-3">
+        <span
+          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
+            (table.remaining_seats ?? 0) > 0
+              ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300"
+              : "bg-destructive/10 text-destructive"
+          }`}
+        >
+          {table.player_count ?? table.remaining_seats ?? "-"}
+        </span>
+      </td>
+    </tr>
+  );
 }
 
 export default function Index() {
   const [tables, setTables] = useState<GameTable[]>([]);
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    const saved = localStorage.getItem(STORAGE_KEY);
-    if (saved) {
+    const fetchTables = async () => {
       try {
-        const parsed = JSON.parse(saved) as GameTable[];
-        setTables(parsed);
-        return;
-      } catch {}
-    }
-    const initial = generateInitialTables();
-    setTables(initial);
-    localStorage.setItem(STORAGE_KEY, JSON.stringify(initial));
+        const res = await fetch("/api/tables");
+        if (!res.ok) throw new Error("Failed to fetch tables");
+        const data = await res.json();
+        setTables(data.tables || []);
+      } catch (err) {
+        console.error("Failed to load tables:", err);
+        toast({
+          title: "Ошибка загрузки",
+          description: "Не удалось загрузить список столов. Попробуйте обновить страницу.",
+          variant: "destructive",
+        });
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchTables();
   }, []);
 
-  useEffect(() => {
-    if (tables.length) {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify(tables));
-    }
-  }, [tables]);
-
   const selectable = useMemo(
-    () => tables.filter((t) => t.freeSeats > 0),
+    () => tables.filter((t) => (t.remaining_seats ?? 0) > 0),
     [tables],
   );
 
@@ -130,7 +156,6 @@ export default function Index() {
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     const chosen = tables.find((t) => t.id === selectedId);
-    const ageNum = Number(age);
 
     if (!chosen) {
       toast({
@@ -146,31 +171,31 @@ export default function Index() {
       });
       return;
     }
-    if (!Number.isFinite(ageNum) || ageNum < 6 || ageNum > 120) {
+    if (!age.trim()) {
       toast({
-        title: "Некорректный возраст",
-        description: "Возраст должен быть от 6 до 120.",
+        title: "Введите контакт",
+        description: "Укажите страничку в соцсетях для связи.",
       });
       return;
     }
-    if (chosen.freeSeats <= 0) {
+    if ((chosen.remaining_seats ?? 0) <= 0) {
       toast({
-        title: "��ест нет",
+        title: "Мест нет",
         description: "К сожалению, в этом столе уже нет мест.",
       });
       return;
     }
 
+    const remainingSeats = (chosen.remaining_seats ?? 0) - 1;
     try {
-      const remainingSeats = chosen.freeSeats - 1;
       const res = await fetch("/api/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           name: name.trim(),
-          age: ageNum,
+          age: age.trim(),
           tableId: chosen.id,
-          masterName: chosen.master,
+          masterName: chosen.master_name,
           remainingSeats,
           system: chosen.system,
         }),
@@ -188,15 +213,16 @@ export default function Index() {
       return;
     }
 
-    setTables((prev) =>
-      prev.map((t) =>
-        t.id === chosen.id ? { ...t, freeSeats: t.freeSeats - 1 } : t,
-      ),
-    );
+    // Refresh tables after registration
+    const refreshRes = await fetch("/api/tables");
+    if (refreshRes.ok) {
+      const refreshData = await refreshRes.json();
+      setTables(refreshData.tables || []);
+    }
 
     toast({
       title: "Успех!",
-      description: `${name} (${ageNum}) записан(а) к мастеру «${chosen.master}». Осталось мест: ${chosen.freeSeats - 1}.`,
+      description: `${name} записан(а) к мастеру «${chosen.master_name}». Осталось мест: ${remainingSeats}.`,
     });
 
     setName("");
@@ -258,7 +284,7 @@ export default function Index() {
               time: "12:00",
               title: "Как вести первую НРИ",
               speaker: "Анна Воронова",
-              desc: "Инструменты для старта: сессия ноль, безопаснос��ь и темп.",
+              desc: "Инструменты для старта: сессия ноль, безопасность и темп.",
             },
             {
               time: "13:30",
@@ -315,7 +341,7 @@ export default function Index() {
             Игровые столы — воскресенье
           </h2>
           <div className="text-sm text-muted-foreground">
-            Свободные места: {tables.reduce((a, t) => a + t.freeSeats, 0)}
+            Свободные места: {tables.reduce((a, t) => a + (t.remaining_seats ?? 0), 0)}
           </div>
         </div>
         <p className="text-sm text-muted-foreground mb-4">
@@ -329,60 +355,63 @@ export default function Index() {
           </TabsList>
 
           <TabsContent value="morning">
-            <div className="hidden md:block overflow-x-auto rounded-lg border">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50">
-                  <tr className="text-left">
-                    <th className="px-4 py-3 w-[22%]">Мастер</th>
-                    <th className="px-4 py-3 w-[18%]">Система</th>
-                    <th className="px-4 py-3">Краткое описание</th>
-                    <th className="px-4 py-3 w-[14%]">Свободных мест</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {morningTables.map((t) => (
-                    <tr key={t.id} className="border-t">
-                      <td className="px-4 py-3 font-medium">{t.master}</td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {t.system}
-                      </td>
-                      <td className="px-4 py-3">{t.description}</td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                            t.freeSeats > 0
-                              ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300"
-                              : "bg-destructive/10 text-destructive"
-                          }`}
-                        >
-                          {t.freeSeats}
-                        </span>
-                      </td>
+            {loading ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Загрузка...
+              </div>
+            ) : (
+              <div className="hidden md:block overflow-x-auto rounded-lg border">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/50">
+                    <tr className="text-left">
+                      <th className="px-4 py-3">Система</th>
+                      <th className="px-4 py-3">Мастер</th>
+                      <th className="px-4 py-3">Название приключения</th>
+                      <th className="px-4 py-3">Описание</th>
+                      <th className="px-4 py-3">Новички</th>
+                      <th className="px-4 py-3">Возраст</th>
+                      <th className="px-4 py-3">Прегены</th>
+                      <th className="px-4 py-3">Число игроков</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {morningTables.map((t) => (
+                      <TableRow key={t.id} table={t} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
             <div className="md:hidden grid gap-3 mt-3">
               {morningTables.map((t) => (
                 <Card key={t.id}>
                   <CardContent className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="font-semibold">{t.master}</div>
+                      <div className="font-semibold">{t.master_name || "-"}</div>
                       <span
                         className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                          t.freeSeats > 0
+                          (t.remaining_seats ?? 0) > 0
                             ? "bg-emerald-100 text-emerald-900"
                             : "bg-destructive/10 text-destructive"
                         }`}
                       >
-                        {t.freeSeats}
+                        {t.player_count ?? t.remaining_seats ?? "-"}
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {t.system}
+                      {t.system || "-"}
                     </div>
-                    <p className="text-sm">{t.description}</p>
+                    {t.adventure_name && (
+                      <div className="text-sm font-medium">{t.adventure_name}</div>
+                    )}
+                    {t.description && (
+                      <TableRowDescription description={t.description} />
+                    )}
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      {t.novices && <div>Новички: {t.novices}</div>}
+                      {t.age_range && <div>Возраст: {t.age_range}</div>}
+                      {t.pregens && <div>Прегены: {t.pregens}</div>}
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -390,60 +419,63 @@ export default function Index() {
           </TabsContent>
 
           <TabsContent value="afternoon">
-            <div className="hidden md:block overflow-x-auto rounded-lg border">
-              <table className="w-full text-sm">
-                <thead className="bg-muted/50">
-                  <tr className="text-left">
-                    <th className="px-4 py-3 w-[22%]">Мастер</th>
-                    <th className="px-4 py-3 w-[18%]">Система</th>
-                    <th className="px-4 py-3">Краткое описание</th>
-                    <th className="px-4 py-3 w-[14%]">Свободных мест</th>
-                  </tr>
-                </thead>
-                <tbody>
-                  {afternoonTables.map((t) => (
-                    <tr key={t.id} className="border-t">
-                      <td className="px-4 py-3 font-medium">{t.master}</td>
-                      <td className="px-4 py-3 text-muted-foreground">
-                        {t.system}
-                      </td>
-                      <td className="px-4 py-3">{t.description}</td>
-                      <td className="px-4 py-3">
-                        <span
-                          className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                            t.freeSeats > 0
-                              ? "bg-emerald-100 text-emerald-900 dark:bg-emerald-500/15 dark:text-emerald-300"
-                              : "bg-destructive/10 text-destructive"
-                          }`}
-                        >
-                          {t.freeSeats}
-                        </span>
-                      </td>
+            {loading ? (
+              <div className="text-center py-8 text-muted-foreground">
+                Загрузка...
+              </div>
+            ) : (
+              <div className="hidden md:block overflow-x-auto rounded-lg border">
+                <table className="w-full text-sm">
+                  <thead className="bg-muted/50">
+                    <tr className="text-left">
+                      <th className="px-4 py-3">Система</th>
+                      <th className="px-4 py-3">Мастер</th>
+                      <th className="px-4 py-3">Название приключения</th>
+                      <th className="px-4 py-3">Описание</th>
+                      <th className="px-4 py-3">Новички</th>
+                      <th className="px-4 py-3">Возраст</th>
+                      <th className="px-4 py-3">Прегены</th>
+                      <th className="px-4 py-3">Число игроков</th>
                     </tr>
-                  ))}
-                </tbody>
-              </table>
-            </div>
+                  </thead>
+                  <tbody>
+                    {afternoonTables.map((t) => (
+                      <TableRow key={t.id} table={t} />
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            )}
             <div className="md:hidden grid gap-3 mt-3">
               {afternoonTables.map((t) => (
                 <Card key={t.id}>
                   <CardContent className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="font-semibold">{t.master}</div>
+                      <div className="font-semibold">{t.master_name || "-"}</div>
                       <span
                         className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
-                          t.freeSeats > 0
+                          (t.remaining_seats ?? 0) > 0
                             ? "bg-emerald-100 text-emerald-900"
                             : "bg-destructive/10 text-destructive"
                         }`}
                       >
-                        {t.freeSeats}
+                        {t.player_count ?? t.remaining_seats ?? "-"}
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground">
-                      {t.system}
+                      {t.system || "-"}
                     </div>
-                    <p className="text-sm">{t.description}</p>
+                    {t.adventure_name && (
+                      <div className="text-sm font-medium">{t.adventure_name}</div>
+                    )}
+                    {t.description && (
+                      <TableRowDescription description={t.description} />
+                    )}
+                    <div className="grid grid-cols-2 gap-2 text-xs">
+                      {t.novices && <div>Новички: {t.novices}</div>}
+                      {t.age_range && <div>Возраст: {t.age_range}</div>}
+                      {t.pregens && <div>Прегены: {t.pregens}</div>}
+                    </div>
                   </CardContent>
                 </Card>
               ))}
@@ -482,7 +514,7 @@ export default function Index() {
                     ) : (
                       selectable.map((t) => (
                         <SelectItem key={t.id} value={t.id}>
-                          {t.master} • {t.system} • мест: {t.freeSeats}
+                          {t.master_name || "-"} • {t.system || "-"} • мест: {t.remaining_seats ?? 0}
                         </SelectItem>
                       ))
                     )}
@@ -500,14 +532,13 @@ export default function Index() {
                 />
               </div>
               <div>
-                <Label htmlFor="age">Возраст</Label>
+                <Label htmlFor="age">Страничка в соцсетях, по которой с тобой можно связаться (VK, TG)</Label>
                 <Input
                   id="age"
                   className="mt-1"
                   value={age}
                   onChange={(e) => setAge(e.target.value)}
-                  placeholder="Например, 18"
-                  inputMode="numeric"
+                  placeholder="Например, @username или vk.com/username"
                 />
               </div>
               <div className="md:col-span-4">
@@ -549,7 +580,7 @@ export default function Index() {
             },
             {
               name: "Райские Миры",
-              description: "Специализированны�� магазин",
+              description: "Специализированный магазин",
               image:
                 "https://images.unsplash.com/photo-1570303540540-25e0e5b2eb9a?q=80&w=400&auto=format&fit=crop",
               link: "https://example.com",
