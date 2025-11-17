@@ -24,6 +24,7 @@ import { ChevronDown } from "lucide-react";
 export type GameTable = {
   id: string;
   master_name: string | null;
+  master_url: string | null;
   system: string | null;
   remaining_seats: number | null;
   adventure_name: string | null;
@@ -32,6 +33,7 @@ export type GameTable = {
   age_range: string | null;
   pregens: string | null;
   player_count: number | null;
+  
 };
 
 // Legacy type for backward compatibility
@@ -86,10 +88,24 @@ function TableRow({ table }: { table: GameTable }) {
       <td className="px-4 py-3 text-muted-foreground">
         {table.system || "-"}
       </td>
+
       <td className="px-4 py-3 font-medium">
-        {table.master_name || "-"}
+        {table.master_url ? (
+          <a
+            href={table.master_url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-blue-600 hover:text-blue-800 hover:underline"
+          >
+            {table.master_name || "-"}
+          </a>
+        ) : (
+          table.master_name || "-"
+        )}
       </td>
+
       <td className="px-4 py-3">{table.adventure_name || "-"}</td>
+
       <td className="px-4 py-3">
         {description ? (
           <TableRowDescription description={description} />
@@ -97,6 +113,7 @@ function TableRow({ table }: { table: GameTable }) {
           "-"
         )}
       </td>
+
       <td className="px-4 py-3">
         <span
           className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
@@ -111,6 +128,7 @@ function TableRow({ table }: { table: GameTable }) {
     </tr>
   );
 }
+
 
 export default function Index() {
   const [tables, setTables] = useState<GameTable[]>([]);
@@ -385,7 +403,21 @@ export default function Index() {
                 <Card key={t.id}>
                   <CardContent className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="font-semibold">{t.master_name || "-"}</div>
+                    <div className="font-semibold">
+  {t.master_url ? (
+    <a
+      href={t.master_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 hover:text-blue-800 hover:underline"
+    >
+      {t.master_name || "-"}
+    </a>
+  ) : (
+    t.master_name || "-"
+  )}
+</div>
+
                       <span
                         className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
                           (t.remaining_seats ?? 0) > 0
@@ -416,7 +448,7 @@ export default function Index() {
               <div className="text-center py-8 text-muted-foreground">
                 Загрузка...
               </div>
-            ) : afternoonTables.length === 0 ? (
+            )   : afternoonTables.length === 0 ? (
               <div className="text-center py-8 text-muted-foreground">
                 Столы пока не добавлены. Данные появятся после заполнения базы данных.
               </div>
@@ -445,7 +477,21 @@ export default function Index() {
                 <Card key={t.id}>
                   <CardContent className="p-4 space-y-2">
                     <div className="flex items-center justify-between">
-                      <div className="font-semibold">{t.master_name || "-"}</div>
+                    <div className="font-semibold">
+  {t.master_url ? (
+    <a
+      href={t.master_url}
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 hover:text-blue-800 hover:underline"
+    >
+      {t.master_name || "-"}
+    </a>
+  ) : (
+    t.master_name || "-"
+  )}
+</div>
+
                       <span
                         className={`inline-flex items-center rounded-md px-2 py-1 text-xs font-semibold ${
                           (t.remaining_seats ?? 0) > 0
