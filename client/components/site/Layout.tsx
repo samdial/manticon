@@ -44,7 +44,7 @@ export default function Layout() {
               МАНТИКОН
             </div>
             <p className="text-muted-foreground mt-2">
-              Конвент настольных ролевых игр. Добро пожаловать в мир
+              Конвент настольных ролевых игр. Добрo пожаловать в мир
               приключений!
             </p>
           </div>
