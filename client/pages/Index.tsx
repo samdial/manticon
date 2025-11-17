@@ -122,7 +122,7 @@ function TableRow({ table }: { table: GameTable }) {
               : "bg-destructive/10 text-destructive"
           }`}
         >
-          {table.player_count ?? table.remaining_seats ?? "-"}
+          {table.remaining_seats ?? "-"}
         </span>
       </td>
     </tr>
@@ -161,8 +161,65 @@ export default function Index() {
     [tables],
   );
 
-  const morningTables = useMemo(() => tables.slice(0, 15), [tables]);
-  const afternoonTables = useMemo(() => tables.slice(15, 30), [tables]);
+  // Distribute tables by time:
+  // - If a master has 1 table: distribute roughly evenly (alternate by order)
+  // - If a master has 2+ tables: ensure they go to different time slots
+  const { morningTables, afternoonTables } = useMemo(() => {
+    const morning: GameTable[] = [];
+    const afternoon: GameTable[] = [];
+    
+    // Track which time slot each master's tables are in
+    const masterTimeSlot = new Map<string, "morning" | "afternoon" | null>();
+    
+    // Sort all tables by id to process in order
+    const sorted = [...tables].sort((a, b) => {
+      const aNum = Number.parseInt(a.id) || 0;
+      const bNum = Number.parseInt(b.id) || 0;
+      return aNum - bNum;
+    });
+    
+    // Track alternating for single-table masters
+    let alternateCounter = 0;
+    
+    for (const table of sorted) {
+      const master = table.master_name || "unknown";
+      const currentSlot = masterTimeSlot.get(master);
+      
+      if (currentSlot === null || currentSlot === undefined) {
+        // First table of this master - alternate by order
+        if (alternateCounter % 2 === 0) {
+          morning.push(table);
+          masterTimeSlot.set(master, "morning");
+        } else {
+          afternoon.push(table);
+          masterTimeSlot.set(master, "afternoon");
+        }
+        alternateCounter++;
+      } else if (currentSlot === "morning") {
+        // Master already has a table in morning - put this one in afternoon
+        afternoon.push(table);
+        masterTimeSlot.set(master, "afternoon");
+      } else {
+        // Master already has a table in afternoon - put this one in morning
+        morning.push(table);
+        masterTimeSlot.set(master, "morning");
+      }
+    }
+    
+    // Sort both arrays by id for consistent display
+    morning.sort((a, b) => {
+      const aNum = Number.parseInt(a.id) || 0;
+      const bNum = Number.parseInt(b.id) || 0;
+      return aNum - bNum;
+    });
+    afternoon.sort((a, b) => {
+      const aNum = Number.parseInt(a.id) || 0;
+      const bNum = Number.parseInt(b.id) || 0;
+      return aNum - bNum;
+    });
+    
+    return { morningTables: morning, afternoonTables: afternoon };
+  }, [tables]);
 
   // Registration form state
   const [selectedId, setSelectedId] = useState<string | undefined>();
@@ -425,7 +482,7 @@ export default function Index() {
                             : "bg-destructive/10 text-destructive"
                         }`}
                       >
-                        {t.player_count ?? t.remaining_seats ?? "-"}
+                        {t.remaining_seats ?? "-"}
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground">
@@ -499,7 +556,7 @@ export default function Index() {
                             : "bg-destructive/10 text-destructive"
                         }`}
                       >
-                        {t.player_count ?? t.remaining_seats ?? "-"}
+                        {t.remaining_seats ?? "-"}
                       </span>
                     </div>
                     <div className="text-xs text-muted-foreground">

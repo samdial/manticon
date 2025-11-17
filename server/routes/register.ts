@@ -105,6 +105,18 @@ export const handleRegister: RequestHandler = async (req, res) => {
         `,
         [tableId, masterName ?? null, system ?? null],
       );
+      
+      // Decrease remaining_seats when a user registers
+      if (typeof remainingSeats === "number" && remainingSeats >= 0) {
+        await pool.query(
+          `
+            UPDATE game_tables
+            SET remaining_seats = $1
+            WHERE id = $2
+          `,
+          [remainingSeats, tableId],
+        );
+      }
     }
 
     const upsertSql = `
