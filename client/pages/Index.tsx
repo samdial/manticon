@@ -509,7 +509,8 @@ export default function Index() {
                       <div className="text-sm font-medium">{t.adventure_name}</div>
                     )}
                     {t.description && (
-                      <TableRowDescription description={t.description} />
+                      //<TableRowDescription description={t.description} />
+                      <div className="text-sm font-medium">{t.description}</div>
                     )}
                   </CardContent>
                 </Card>
@@ -626,7 +627,7 @@ export default function Index() {
         name: "Ковен 36",
         description: "",
         image: "/img/4.webp",
-        link: "",
+        link: "https://example.com",
       },
       {
         name: "Narash workshop",
