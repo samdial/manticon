@@ -577,10 +577,22 @@ export default function Index() {
                 />
               </div>
               <div className="md:col-span-4">
-                <Button type="submit" className="w-full md:w-auto">
-                  Записаться
-                </Button>
-              </div>
+  <Button type="submit" className="w-full md:w-auto">
+    Записаться
+  </Button>
+
+  <p className="mt-3 text-sm text-gray-600 dark:text-gray-300">
+    Нажимая «Записаться», вы соглашаетесь с{" "}
+    <a
+      href="/policy"
+      target="_blank"
+      rel="noopener noreferrer"
+      className="text-blue-600 hover:underline dark:text-blue-400"
+    >
+      Политикой обработки персональных данных
+    </a>.
+  </p>
+</div>
             </form>
           </CardContent>
         </Card>
@@ -593,112 +605,112 @@ export default function Index() {
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
     {[
       {
-        name: "DeadFish Crew",
-        description: "Сеть кафе настольных игр",
-        image: "/client/img/1.webp",
+        name: "☾ Imiris ☾",
+        description: " ✦ необыкновенные украшения ✦",
+        image: "/img/1.webp",
+        link: "https://vk.com/imiris_workshop",
+      },
+      {
+        name: "DeadFishCrew",
+        description: "Немного рукоделия, немного рукоблудия, много упоротости и увлечённости.",
+        image: "/img/2.webp",
+        link: "https://vk.com/deadfishcrew",
+      },
+      {
+        name: "Dice Lab",
+        description: "Ищешь уникальные дайсы? Ты их уже нашел. ",
+        image: "img/3.webp",
+        link: "https://vk.com/dicelab",
+      },
+      {
+        name: "Ковен 36",
+        description: "",
+        image: "/img/4.webp",
         link: "https://example.com",
       },
       {
-        name: "DragonSkull Games",
-        description: "Издатель настольных ролевых игр",
-        image: "/client/img/2.webp",
-        link: "https://example.com",
+        name: "Narash workshop",
+        description: "",
+        image: "/img/5.webp",
+        link: "https://vk.com/narash_cosplay",
       },
       {
-        name: "Издательство 3",
-        description: "Описание издательства 3",
-        image: "/client/img/3.webp",
-        link: "https://example.com",
+        name: "Pandora Box",
+        description: "",
+        image: "/img/6.webp",
+        link: "https://vk.com/studiapandorabox",
       },
       {
-        name: "Издательство 4",
-        description: "Описание издательства 4",
-        image: "/client/img/4.webp",
-        link: "https://example.com",
+        name: "Rollевая кухня",
+        description: " ",
+        image: "/img/7.webp",
+        link: "https://vk.com/rollplaykitchen",
+      },  
+      {
+        name: "НSkull Factory",
+        description: "Лучший подарок - это подарок сделанный моими руками!",
+        image: "/img/8.webp",
+        link: "https://vk.com/sckull",
       },
       {
-        name: "Издательство 5",
-        description: "Описание издательства 5",
-        image: "/client/img/5.webp",
-        link: "https://example.com",
+        name: "Wishport",
+        description: "Издательство настольных ролевых игр",
+        image: "/img/9.webp",
+        link: "https://vk.com/wishport",
       },
       {
-        name: "Экспедиция",
-        description: "Туристическое агентство",
-        image: "/client/img/6.webp",
-        link: "https://example.com",
+        name: "замогилье",
+        description: "",
+        image: "/img/10.webp",
+        link: "https://vk.com/mog1lka",
       },
       {
-        name: "Райские Миры",
-        description: "Специализированный магазин",
-        image: "/client/img/7.webp",
-        link: "https://example.com",
-      },
-      {
-        name: "Ночной Орден",
-        description: "Баланс игровых правил",
-        image: "/client/img/8.webp",
-        link: "https://example.com",
-      },
-      {
-        name: "Легенда",
-        description: "Сообщество неклассических RPG",
-        image: "/client/img/9.webp",
-        link: "https://example.com",
-      },
-      {
-        name: "Издательство 10",
-        description: "Описание издательства 10",
-        image: "/client/img/10.webp",
-        link: "https://example.com",
-      },
-      {
-        name: "Издательство 11",
+        name: "Нити судьбы",
         description: "Описание издательства 11",
-        image: "/client/img/11.webp",
-        link: "https://example.com",
+        image: "/img/11.webp",
+        link: "https://vk.com/nitisudbu",
       },
       {
-        name: "Издательство 12",
-        description: "Описание издательства 12",
-        image: "/client/img/12.webp",
-        link: "https://example.com",
+        name: "НРИ Офиздат",
+        description: "издательство и магазин настольных ролевых игр ",
+        image: "/img/12.webp",
+        link: "https://ofizdat.ru/",
       },
       {
-        name: "Издательство 13",
-        description: "Описание издательства 13",
-        image: "/client/img/13.webp",
-        link: "https://example.com",
+        name: "Рыжий библиотекарь",
+        description: "издательство и магазин настольных ролевых игр ",
+        image: "/img/13.webp",
+        link: "https://vk.com/red_librarian",
       },
       {
-        name: "Издательство 14",
-        description: "Описание издательства 14",
-        image: "/client/img/14.webp",
-        link: "https://example.com",
+        name: "Студия 101",
+        description: "Издатель ролевых игр на русском языке.",
+        image: "/img/14.webp",
+        link: "https://vk.com/studio101",
       },
       {
-        name: "Издательство 15",
-        description: "Описание издательства 15",
-        image: "/client/img/15.webp",
-        link: "https://example.com",
+        name: "Сундук Мастера",
+        description: "сокровищница уникальных аксессуаров для настольных ролевых игр!",
+        image: "/img/15.webp",
+        link: "https://vk.com/diceboxes",
       },
       {
-        name: "Издательство 16",
-        description: "Описание издательства 16",
-        image: "/client/img/16.webp",
-        link: "https://example.com",
+        name: "У Хорька",
+        description: "3D-студия печати",
+        image: "/img/16.webp",
+        link: "https://vk.com/u_horka",
       },
       {
-        name: "Издательство 17",
-        description: "Описание издательства 17",
-        image: "/client/img/17.webp",
-        link: "https://example.com",
+        name: "Четвёртый чердак",
+        description: "авторская керамика",
+        image: "/img/17.png",
+        link: "https://vk.com/cherdak4m",
       },
       {
-        name: "Издательство 18",
-        description: "Описание издательства 18",
-        image: "/client/img/18.webp",
-        link: "https://example.com",
+        name: "Чудеса Леса",
+        description: "Творческая мастерская",
+        image: "/img/18.webp",
+        link: "https://vk.com/chudesalesa",
       },
     ].map((sponsor, i) => (
       <a
