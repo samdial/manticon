@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "@/components/site";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound.tsx";
-import Policy from "@/components/site/Policy";
+//import Policy from "@/components/site/Policy";
 
 const queryClient = new QueryClient();
 
