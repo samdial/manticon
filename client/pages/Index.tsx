@@ -596,7 +596,7 @@ export default function Index() {
         name: "DeadFish Crew",
         description: "Сеть кафе настольных игр",
         image: "/client/img/1.webp",
-        link: "https://example.com",
+        link: "https://vk.com/deadfishcrew",
       },
       {
         name: "DragonSkull Games",
