@@ -8,7 +8,7 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import { Layout } from "@/components/site";
 import Index from "@/pages/Index";
 import NotFound from "@/pages/NotFound.tsx";
-import Policy from "@/components/site/Policy";
+import PolicyPage from "@/components/site/Policy";
 
 const queryClient = new QueryClient();
 
@@ -21,7 +21,7 @@ const App = () => (
         <Routes>
           <Route element={<Layout />}>
             <Route path="/" element={<Index />} />
-            <Route path="/policy" element={<Policy />} />
+            <Route path="/policy" element={<PolicyPage />} />
             {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
             <Route path="*" element={<NotFound />} />
           </Route>
