@@ -14,6 +14,8 @@ services:
       # Option 1: Full DATABASE_URL
       # DATABASE_URL: "${DATABASE_URL}"
       # Option 2: Individual PostgreSQL variables (for Timeweb Cloud)
+          # Option 2: Individual PostgreSQL variables (for Timeweb Cloud)
+          
       POSTGRESQL_HOST: "${POSTGRESQL_HOST}"
       POSTGRESQL_PORT: "${POSTGRESQL_PORT}"
       POSTGRESQL_USER: "${POSTGRESQL_USER}"
