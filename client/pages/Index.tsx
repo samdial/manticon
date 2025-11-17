@@ -593,13 +593,13 @@ export default function Index() {
   <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
     {[
       {
-        name: "DeadFish Crew",
-        description: "Сеть кафе настольных игр",
+        name: "☾ Imiris ☾",
+        description: " ✦ необыкновенные украшения ✦",
         image: "/client/img/1.webp",
-        link: "https://vk.com/deadfishcrew",
+        link: "https://vk.com/imiris_workshop",
       },
       {
-        name: "DragonSkull Games",
+        name: "DeadFish Crew",
         description: "Издатель настольных ролевых игр",
         image: "/client/img/2.webp",
         link: "https://example.com",
