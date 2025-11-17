@@ -516,7 +516,7 @@ export default function Index() {
                 </Card>
               ))}
             </div>
-          </TabsContent>
+          </TabsContent>  
         </Tabs>
       </section>
 
