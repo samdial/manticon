@@ -75,21 +75,24 @@ export default function Layout() {
           </div>
           <div>
           <div className="font-semibold mb-2">Контакты</div>
-<a 
+          <a 
   href="https://vk.com/id4883678" 
-  target="_blank" 
+  target="_blank"
   rel="noopener noreferrer"
   className="text-muted-foreground block hover:text-amber-600 transition-colors"
+  title="Профиль ВКонтакте"
 >
-  https://vk.com/id4883678
+  Богдан Воронов (VK)
 </a>
+
 <a 
   href="https://vk.com/dicecraftclub" 
-  target="_blank" 
+  target="_blank"
   rel="noopener noreferrer"
   className="text-muted-foreground block hover:text-amber-600 transition-colors"
+  title="Сообщество ВКонтакте"
 >
-  VK: https://vk.com/dicecraftclub
+  В костях у мантикоры (VK)
 </a>
           </div>
         </div>

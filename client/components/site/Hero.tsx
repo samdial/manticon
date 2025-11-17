@@ -3,7 +3,7 @@ export default function Hero() {
     <section className="relative">
       <div className="absolute inset-0">
         <img
-          src="/client/img/main.jpg?format=webp&width=800"
+          src="/img/main.jpg?format=webp&width=800"
           alt="В гостях у Мантикоры — шапка конвента"
           className="h-[56vh] w-full object-cover"
         />

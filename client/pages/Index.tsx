@@ -626,7 +626,7 @@ export default function Index() {
         name: "Ковен 36",
         description: "",
         image: "/img/4.webp",
-        link: "https://example.com",
+        link: "",
       },
       {
         name: "Narash workshop",
