@@ -4,6 +4,7 @@ import { pool } from "../db";
 export interface GameTableResponse {
   id: string;
   master_name: string | null;
+  master_url: string | null;
   system: string | null;
   remaining_seats: number | null;
   adventure_name: string | null;
@@ -12,6 +13,7 @@ export interface GameTableResponse {
   age_range: string | null;
   pregens: string | null;
   player_count: number | null;
+  morning: boolean | null;
 }
 
 export const handleGetTables: RequestHandler = async (_req, res) => {
@@ -37,6 +39,7 @@ export const handleGetTables: RequestHandler = async (_req, res) => {
       SELECT 
         id,
         master_name,
+        master_url,
         system,
         remaining_seats,
         adventure_name,
@@ -44,7 +47,8 @@ export const handleGetTables: RequestHandler = async (_req, res) => {
         novices,
         age_range,
         pregens,
-        player_count
+        player_count,
+        morning
       FROM game_tables
       ORDER BY id
       `,

@@ -80,7 +80,9 @@ export async function initDb(): Promise<void> {
     ADD COLUMN IF NOT EXISTS novices TEXT,
     ADD COLUMN IF NOT EXISTS age_range TEXT,
     ADD COLUMN IF NOT EXISTS pregens TEXT,
-    ADD COLUMN IF NOT EXISTS player_count INT;
+    ADD COLUMN IF NOT EXISTS player_count INT,
+    ADD COLUMN IF NOT EXISTS morning BOOLEAN,
+    ADD COLUMN IF NOT EXISTS master_url TEXT;
   `);
   // Best-effort backfill remaining_seats from legacy users.meta.remainingSeats (minimum per table)
   await pool.query(`

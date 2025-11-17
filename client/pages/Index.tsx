@@ -33,7 +33,7 @@ export type GameTable = {
   age_range: string | null;
   pregens: string | null;
   player_count: number | null;
-  
+  morning: boolean | null;
 };
 
 // Legacy type for backward compatibility
@@ -161,48 +161,17 @@ export default function Index() {
     [tables],
   );
 
-  // Distribute tables by time:
-  // - If a master has 1 table: distribute roughly evenly (alternate by order)
-  // - If a master has 2+ tables: ensure they go to different time slots
+  // Distribute tables by time using the `morning` column from database
+  // true = morning (10:30), false/null = afternoon (15:00)
   const { morningTables, afternoonTables } = useMemo(() => {
     const morning: GameTable[] = [];
     const afternoon: GameTable[] = [];
     
-    // Track which time slot each master's tables are in
-    const masterTimeSlot = new Map<string, "morning" | "afternoon" | null>();
-    
-    // Sort all tables by id to process in order
-    const sorted = [...tables].sort((a, b) => {
-      const aNum = Number.parseInt(a.id) || 0;
-      const bNum = Number.parseInt(b.id) || 0;
-      return aNum - bNum;
-    });
-    
-    // Track alternating for single-table masters
-    let alternateCounter = 0;
-    
-    for (const table of sorted) {
-      const master = table.master_name || "unknown";
-      const currentSlot = masterTimeSlot.get(master);
-      
-      if (currentSlot === null || currentSlot === undefined) {
-        // First table of this master - alternate by order
-        if (alternateCounter % 2 === 0) {
-          morning.push(table);
-          masterTimeSlot.set(master, "morning");
-        } else {
-          afternoon.push(table);
-          masterTimeSlot.set(master, "afternoon");
-        }
-        alternateCounter++;
-      } else if (currentSlot === "morning") {
-        // Master already has a table in morning - put this one in afternoon
-        afternoon.push(table);
-        masterTimeSlot.set(master, "afternoon");
-      } else {
-        // Master already has a table in afternoon - put this one in morning
+    for (const table of tables) {
+      if (table.morning === true) {
         morning.push(table);
-        masterTimeSlot.set(master, "morning");
+      } else {
+        afternoon.push(table);
       }
     }
     
