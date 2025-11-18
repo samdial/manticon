@@ -17,6 +17,7 @@ export type PlayerRow = {
   last_name: string | null;
   registered_at: string;
   meta: unknown | null;
+  table_id?: string | null;
 };
 
 export type PlayerEntry = {
@@ -57,7 +58,9 @@ function mapName(meta: PlayerMeta, fallback?: string | null): string {
 
 export function mapRow(row: PlayerRow): { entry: PlayerEntry; tableId: string; meta: PlayerMeta } {
   const meta = safeParseMeta(row.meta);
-  const tableId = meta.tableId ? String(meta.tableId) : "—";
+  const tableIdFromRow =
+    row.table_id !== undefined && row.table_id !== null ? String(row.table_id) : undefined;
+  const tableId = tableIdFromRow ?? (meta.tableId ? String(meta.tableId) : "—");
   const entry: PlayerEntry = {
     id: row.id,
     name: mapName(meta, row.username),
@@ -216,7 +219,25 @@ export async function getTableGroupAsync(tableId: string): Promise<TableGroup | 
 export async function deletePlayerByIdAsync(id: number): Promise<PlayerEntry | null> {
   const { rows } = await pool.query<PlayerRow>("DELETE FROM users WHERE id = $1 RETURNING *", [id]);
   if (!rows.length) return null;
-  return mapRow(rows[0]).entry;
+
+  const removedRow = rows[0];
+  const tableId =
+    (removedRow.table_id !== undefined && removedRow.table_id !== null
+      ? String(removedRow.table_id)
+      : undefined) ?? (safeParseMeta(removedRow.meta).tableId ?? undefined);
+
+  if (tableId) {
+    await pool.query(
+      `
+        UPDATE game_tables
+        SET remaining_seats = COALESCE(remaining_seats, 0) + 1
+        WHERE id = $1
+      `,
+      [tableId],
+    );
+  }
+
+  return mapRow(removedRow).entry;
 }
 
 export function buildPlayersReport(groups: TableGroup[]): string {
