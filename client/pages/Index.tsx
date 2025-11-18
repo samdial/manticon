@@ -19,6 +19,13 @@ import {
   CollapsibleContent,
   CollapsibleTrigger,
 } from "@/components/ui/collapsible";
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+} from "@/components/ui/dialog";
 import { ChevronDown } from "lucide-react";
 
 export type GameTable = {
@@ -194,6 +201,7 @@ export default function Index() {
   const [selectedId, setSelectedId] = useState<string | undefined>();
   const [name, setName] = useState("");
   const [age, setAge] = useState("");
+  const [showSuccessDialog, setShowSuccessDialog] = useState(false);
 
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -228,7 +236,6 @@ export default function Index() {
       return;
     }
 
-    const remainingSeats = (chosen.remaining_seats ?? 0) - 1;
     try {
       const res = await fetch("/api/register", {
         method: "POST",
@@ -238,37 +245,59 @@ export default function Index() {
           age: age.trim(),
           tableId: chosen.id,
           masterName: chosen.master_name,
-          remainingSeats,
           system: chosen.system,
         }),
       });
+      
       if (!res.ok) {
         const err = await res.json().catch(() => ({}));
-        throw new Error(err?.error || `HTTP ${res.status}`);
+        const errorMessage = err?.message || err?.error || `HTTP ${res.status}`;
+        toast({
+          title: "Ошибка регистрации",
+          description: errorMessage,
+          variant: "destructive",
+        });
+        return;
       }
     } catch (err) {
       console.error("Register request failed", err);
       toast({
         title: "Ошибка регистрации",
         description: "Не удалось отправить запрос. Попробуйте ещё раз.",
+        variant: "destructive",
       });
       return;
     }
 
-    // Refresh tables after registration
+    // Refresh tables after registration to get updated remaining_seats
     const refreshRes = await fetch("/api/tables");
     if (refreshRes.ok) {
       const refreshData = await refreshRes.json();
       setTables(refreshData.tables || []);
-    }
+      
+      // Find updated table to show correct remaining seats in toast
+      const updatedTable = refreshData.tables?.find((t: GameTable) => t.id === chosen.id);
+      const remainingSeats = updatedTable?.remaining_seats ?? 0;
 
-    toast({
-      title: "Успех!",
-      description: `${name} записан(а) к мастеру «${chosen.master_name}». Осталось мест: ${remainingSeats}.`,
-    });
+      // Show success dialog
+      setShowSuccessDialog(true);
+
+      toast({
+        title: "Успех!",
+        description: `${name} записан(а) к мастеру «${chosen.master_name}». Осталось мест: ${remainingSeats}.`,
+      });
+    } else {
+      // Still show success if refresh fails, but without remaining seats info
+      setShowSuccessDialog(true);
+      toast({
+        title: "Успех!",
+        description: `${name} записан(а) к мастеру «${chosen.master_name}».`,
+      });
+    }
 
     setName("");
     setAge("");
+    setSelectedId(undefined);
   };
 
   return (
@@ -768,6 +797,17 @@ export default function Index() {
     ))}
   </div>
 </section>
+
+      <Dialog open={showSuccessDialog} onOpenChange={setShowSuccessDialog}>
+        <DialogContent>
+          <DialogHeader>
+            <DialogTitle>Вы зарегистрированы</DialogTitle>
+            <DialogDescription>
+              Регистрация прошла успешно! Мы свяжемся с вами в ближайшее время.
+            </DialogDescription>
+          </DialogHeader>
+        </DialogContent>
+      </Dialog>
     </div>
   );
 }

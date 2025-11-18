@@ -106,16 +106,25 @@ export const handleRegister: RequestHandler = async (req, res) => {
         [tableId, masterName ?? null, system ?? null],
       );
       
-      // Decrease remaining_seats when a user registers
-      if (typeof remainingSeats === "number" && remainingSeats >= 0) {
-        await pool.query(
-          `
-            UPDATE game_tables
-            SET remaining_seats = $1
-            WHERE id = $2
-          `,
-          [remainingSeats, tableId],
-        );
+      // Atomically decrease remaining_seats when a user registers
+      // This prevents race conditions when multiple users register simultaneously
+      const updateResult = await pool.query(
+        `
+          UPDATE game_tables
+          SET remaining_seats = GREATEST(0, COALESCE(remaining_seats, 0) - 1)
+          WHERE id = $1
+            AND COALESCE(remaining_seats, 0) > 0
+          RETURNING remaining_seats
+        `,
+        [tableId],
+      );
+      
+      // Check if the update actually happened (seat was available)
+      if (updateResult.rows.length === 0) {
+        return res.status(400).json({ 
+          error: "No seats available",
+          message: "К сожалению, в этом столе уже нет свободных мест." 
+        });
       }
     }
 
