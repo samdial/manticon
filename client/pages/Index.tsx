@@ -415,13 +415,13 @@ export default function Index() {
           </div>
         </div>
         <p className="text-sm text-muted-foreground mb-4">
-          Сессии 10:30–15:00 и с 15:00.
+          Сессии 10:30–14:30 и 15:00-19:00.
         </p>
 
         <Tabs defaultValue="morning">
           <TabsList>
-            <TabsTrigger value="morning">10:30–15:00</TabsTrigger>
-            <TabsTrigger value="afternoon">с 15:00</TabsTrigger>
+            <TabsTrigger value="morning">10:30–14:30</TabsTrigger>
+            <TabsTrigger value="afternoon">15:00-19:00</TabsTrigger>
           </TabsList>
 
           <TabsContent value="morning">
